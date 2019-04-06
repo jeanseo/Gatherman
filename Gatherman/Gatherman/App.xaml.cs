@@ -11,7 +11,8 @@ namespace Gatherman
         {
             InitializeComponent();
 
-            MainPage = new Gatherman.DataAccess.DBAccess();
+            MainPage = new NavigationPage(new Gatherman.DataAccess.DBAccess());
+
         }
 
         protected override void OnStart()

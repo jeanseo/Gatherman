@@ -4,10 +4,6 @@
              x:Class="Gatherman.DataAccess.DBAccess">
     <ContentPage.Content>
         <StackLayout>
-            <Entry Placeholder="Nom"
-                   x:Name="EntryName"/>
-            <Entry Placeholder="Prénom"
-                   x:Name="EntryFirstName"/>
             <StackLayout Orientation="Horizontal">
                 <Button Text="Add" Clicked="OnAdd"/>
                 <Button Text="Update" Clicked="OnUpdate"/>

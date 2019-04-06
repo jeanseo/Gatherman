@@ -10,6 +10,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using SQLite;
 using System.Collections.ObjectModel;
+using Gatherman.Views;
 
 namespace Gatherman.DataAccess
 {
@@ -44,9 +45,10 @@ namespace Gatherman.DataAccess
 
         private async void OnAdd(object sender, EventArgs e)
         {
-            var merchant = new Merchant { Name = EntryName.Text , FirstName = EntryFirstName.Text };
-            await _connection.InsertAsync(merchant);
-            _Merchants.Add(merchant);
+            //var merchant = new Merchant { Name = EntryName.Text , FirstName = EntryFirstName.Text };
+            //await _connection.InsertAsync(merchant);
+            //_Merchants.Add(merchant);
+            await Navigation.PushAsync(new MerchantForm() );
         }
 
         private async void OnUpdate(object sender, EventArgs e)
