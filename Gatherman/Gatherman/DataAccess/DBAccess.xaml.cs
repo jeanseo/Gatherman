@@ -44,7 +44,7 @@ namespace Gatherman.DataAccess
 
         private async void OnAdd(object sender, EventArgs e)
         {
-            var merchant = new Merchant { Name = "Jean-Louis" + DateTime.Now.Ticks };
+            var merchant = new Merchant { Name = EntryName.Text , FirstName = EntryFirstName.Text };
             await _connection.InsertAsync(merchant);
             _Merchants.Add(merchant);
         }

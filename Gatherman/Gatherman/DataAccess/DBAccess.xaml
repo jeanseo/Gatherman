@@ -4,6 +4,10 @@
              x:Class="Gatherman.DataAccess.DBAccess">
     <ContentPage.Content>
         <StackLayout>
+            <Entry Placeholder="Nom"
+                   x:Name="EntryName"/>
+            <Entry Placeholder="Prénom"
+                   x:Name="EntryFirstName"/>
             <StackLayout Orientation="Horizontal">
                 <Button Text="Add" Clicked="OnAdd"/>
                 <Button Text="Update" Clicked="OnUpdate"/>
@@ -12,7 +16,7 @@
             <ListView x:Name="lstVMerchant">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding Name}" />
+                        <TextCell Text ="{Binding FullName}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

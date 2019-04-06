@@ -30,6 +30,32 @@ namespace Gatherman.DataAccess.Model
                 OnPropertyChanged();
             }
         }
+
+        private string _firstName;
+
+        [MaxLength(255)]
+        public string FirstName
+        {
+            get { return _firstName; }
+            set
+            {
+                if (_firstName == value)
+                {
+                    //aucune modification
+                    return;
+                }
+                //Il y a eu modification
+                _firstName = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public string FullName
+        {
+            get { return string.Format("{0} {1}", FirstName, Name); }
+        }
+
         private void OnPropertyChanged([CallerMemberName] string PropertyName=null)
         {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));

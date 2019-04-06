@@ -15,7 +15,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\MerchantForm.xaml.cs">
+      <DependentUpon>MerchantForm.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="DataAccess\DBAccess.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MerchantForm.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
