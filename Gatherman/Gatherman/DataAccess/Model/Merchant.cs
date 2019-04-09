@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace Gatherman.DataAccess.Model
 {
-    class Merchant : INotifyPropertyChanged
+    public class Merchant : INotifyPropertyChanged
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }

@@ -12,10 +12,23 @@
             <ListView x:Name="lstVMerchant">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text ="{Binding FullName}" />
+                        <ViewCell>
+
+                            <StackLayout Orientation="Horizontal">
+                            <Label Text ="{Binding FullName}" />
+                            <Button Text="Edit" 
+                                    CommandParameter="{Binding .}"
+                                    Clicked="OnEdit"
+                                    />
+                            
+                        </StackLayout>
+                        </ViewCell>
+
                     </DataTemplate>
                 </ListView.ItemTemplate>
+                
             </ListView>
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

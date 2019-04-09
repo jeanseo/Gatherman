@@ -41,6 +41,18 @@ namespace Gatherman.DataAccess
             //On passe la liste de Merchant vers le Xaml
             lstVMerchant.ItemsSource = _Merchants;
             base.OnAppearing();
+
+            lstVMerchant.ItemSelected += (sender, e) =>
+            {
+                if (lstVMerchant.SelectedItem != null)
+                {
+                    Merchant item = lstVMerchant.SelectedItem as Merchant;
+                    DisplayAlert(item.FullName, "Vous avez cliqué sur un marchand", "OK");
+                                    lstVMerchant.SelectedItem = null;
+                }
+                
+            };
+
         }
 
         private async void OnAdd(object sender, EventArgs e)
@@ -65,5 +77,12 @@ namespace Gatherman.DataAccess
             // Retirer l'objet de la liste view
             _Merchants.Remove(merchantToDelete);
         }
+        private async void OnEdit(object sender, EventArgs e)
+        {
+            var b = ((Button)sender);
+            var merchantToEdit = b.CommandParameter as Merchant;
+            await Navigation.PushAsync(new MerchantForm(merchantToEdit));
+        }
+
     }
 }
