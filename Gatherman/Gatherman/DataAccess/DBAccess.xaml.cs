@@ -72,7 +72,8 @@ namespace Gatherman.DataAccess
 
         private async void OnDelete(object sender, EventArgs e)
         {
-            var merchantToDelete = _Merchants[0];
+            var b = ((Button)sender);
+            var merchantToDelete = b.CommandParameter as Merchant;
             await _connection.DeleteAsync(merchantToDelete);
             // Retirer l'objet de la liste view
             _Merchants.Remove(merchantToDelete);
