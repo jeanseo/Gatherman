@@ -11,6 +11,7 @@ using Xamarin.Forms.Xaml;
 using SQLite;
 using System.Collections.ObjectModel;
 using Gatherman.Views;
+using Plugin.Media;
 
 namespace Gatherman.DataAccess
 {
@@ -84,6 +85,5 @@ namespace Gatherman.DataAccess
             var merchantToEdit = b.CommandParameter as Merchant;
             await Navigation.PushAsync(new MerchantForm(merchantToEdit));
         }
-
     }
 }
