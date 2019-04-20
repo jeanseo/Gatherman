@@ -10,10 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\default_portrait.png" />
     <None Remove="images\portrait.svg" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="images\default_portrait.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="images\portrait.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

@@ -1,8 +1,10 @@
 ﻿using Gatherman.Data;
 using Gatherman.DataAccess.Model;
 using Plugin.Media;
+using Plugin.Media.Abstractions;
 using SQLite;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +21,7 @@ namespace Gatherman.Views
 
         private bool EditForm;
         public Merchant merchant;
+        private string portraitFileLocation;
 
 
         //Déclaration de la liaison avec la base de données
@@ -26,12 +29,12 @@ namespace Gatherman.Views
         public MerchantForm ()
 		{
 
-            Portrait.Source = ImageSource.FromResource("Gatherman.images.portrait.svg");
-
             InitializeComponent();
             // Je crée ma connection avec la base de données
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
             this.EditForm = false;
+            Portrait.Source = ImageSource.FromResource("Gatherman.images.default_portrait.png");
+
         }
 
         public MerchantForm(Merchant _merchant)
@@ -44,6 +47,14 @@ namespace Gatherman.Views
             this.EditForm = true;
             EntryName.Text = this.merchant.Name;
             EntryFirstName.Text = this.merchant.FirstName;
+            if (this.merchant.Portrait == null)
+            {
+                Portrait.Source = ImageSource.FromResource("Gatherman.images.default_portrait.png");
+            }
+            else
+            {
+                Portrait.Source = new ImageSourceConverter().ConvertFromInvariantString(this.merchant.Portrait) as ImageSource;
+            }
 
         }
 
@@ -53,11 +64,13 @@ namespace Gatherman.Views
             {
                 this.merchant.Name = EntryName.Text;
                 this.merchant.FirstName = EntryFirstName.Text;
+                this.merchant.Portrait = portraitFileLocation;
                 await _connection.UpdateAsync(this.merchant);
             }
             else
             {
-                var merchant = new Merchant { Name = EntryName.Text, FirstName = EntryFirstName.Text };
+                var merchant = new Merchant { Name = EntryName.Text, FirstName = EntryFirstName.Text, Portrait = portraitFileLocation };
+            
                 await _connection.InsertAsync(merchant);
             }
             
@@ -77,12 +90,15 @@ namespace Gatherman.Views
                 var mediaOptions = new Plugin.Media.Abstractions.StoreCameraMediaOptions
                 {
                     Directory = "Receipts",
-                    Name = $"{DateTime.UtcNow}.jpg"
+                    Name = $"{DateTime.UtcNow}.jpg",
+                    PhotoSize = PhotoSize.Medium,
+                    CompressionQuality = 80
                 };
 
                 // Take a photo of the business receipt.
                 var file = await CrossMedia.Current.TakePhotoAsync(mediaOptions);
                 Portrait.Source = file.Path;
+                portraitFileLocation = Path.GetDirectoryName(file.Path) + "/" + Path.GetFileName(file.Path);
             }
         }
 

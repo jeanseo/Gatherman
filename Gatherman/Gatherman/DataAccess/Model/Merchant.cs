@@ -55,6 +55,25 @@ namespace Gatherman.DataAccess.Model
         {
             get { return string.Format("{0} {1}", FirstName, Name); }
         }
+        private string _portrait;
+
+        public string Portrait
+        {
+            get { return _portrait; }
+
+            set
+            {
+                if (_portrait == value)
+                {
+                    //aucune modification
+                    return;
+                }
+                //Il y a eu modification
+                _portrait = value;
+
+                OnPropertyChanged();
+            }
+        }
 
         private void OnPropertyChanged([CallerMemberName] string PropertyName=null)
         {
