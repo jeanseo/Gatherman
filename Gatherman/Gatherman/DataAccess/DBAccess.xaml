@@ -4,16 +4,17 @@
              x:Class="Gatherman.DataAccess.DBAccess">
         <NavigationPage.TitleView>
             <StackLayout Orientation="Horizontal">
-                <Label Text="Commerçant"
+            <Label Text="menu"/>
+            <Label Text="Commerçant"
                    HorizontalOptions="StartAndExpand"
                    VerticalOptions="CenterAndExpand"
                />
-            </StackLayout>
+            <Button Text="Add" Clicked="OnAdd"/>
+        </StackLayout>
         </NavigationPage.TitleView>
     <ContentPage.Content>
         <StackLayout>
             <StackLayout Orientation="Horizontal">
-                <Button Text="Add" Clicked="OnAdd"/>
             </StackLayout>
             <ListView x:Name="lstVMerchant">
                 <ListView.ItemTemplate>

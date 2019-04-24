@@ -64,7 +64,12 @@ namespace Gatherman.Views
             {
                 this.merchant.Name = EntryName.Text;
                 this.merchant.FirstName = EntryFirstName.Text;
-                this.merchant.Portrait = portraitFileLocation;
+                
+                if (this.merchant.Portrait != null && portraitFileLocation != null)
+                {
+                    //TODO si on change la photo, il faut supprimer l'ancien fichier image
+                    this.merchant.Portrait = portraitFileLocation;
+                }
                 await _connection.UpdateAsync(this.merchant);
             }
             else
