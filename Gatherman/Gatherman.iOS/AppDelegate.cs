@@ -4,6 +4,7 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using Vapolia.Ios.Lib.Effects;
 
 namespace Gatherman.iOS
 {
@@ -22,6 +23,7 @@ namespace Gatherman.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            PlatformGestureEffect.Init();
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
 

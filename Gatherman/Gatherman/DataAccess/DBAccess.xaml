@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Gatherman.DataAccess.DBAccess">
+             x:Class="Gatherman.DataAccess.DBAccess"
+             xmlns:ui="clr-namespace:Vapolia.Lib.Ui;assembly=XamarinFormsGesture"
+             >
         <NavigationPage.TitleView>
             <StackLayout Orientation="Horizontal">
             <Label Text="menu"/>
@@ -16,7 +18,7 @@
         <StackLayout>
             <StackLayout Orientation="Horizontal">
             </StackLayout>
-            <ListView x:Name="lstVMerchant">
+            <ListView x:Name="lstVMerchant" ui:Gesture.SwipeLeftCommand="{Binding SwipeLeftCommand}" IsEnabled="True" InputTransparent="False">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

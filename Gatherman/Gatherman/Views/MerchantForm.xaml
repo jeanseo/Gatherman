@@ -14,7 +14,10 @@
     </NavigationPage.TitleView>
     <ContentPage.Content>
         <StackLayout>
-            <Image x:Name="Portrait"></Image>
+            <AbsoluteLayout>
+                <Image x:Name="Portrait"></Image>
+            </AbsoluteLayout>
+            
             <Entry Placeholder="Nom"
                    x:Name="EntryName"
                    />
@@ -22,7 +25,10 @@
                    x:Name="EntryFirstName"
                    Text="{Binding merchant.Name}"
                    />
+            <Label x:Name="picturePath"/>
             <Button Text="Camera" Clicked="OnCamera"/>
+            <Button Text="Choisir image" Clicked="OnPickPicture"/>
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -12,7 +12,10 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-
+using System.Net;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Diagnostics;
 namespace Gatherman.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -45,15 +48,16 @@ namespace Gatherman.Views
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
             this.merchant = _merchant;
             this.EditForm = true;
-            EntryName.Text = this.merchant.Name;
-            EntryFirstName.Text = this.merchant.FirstName;
-            if (this.merchant.Portrait == null)
+            EntryName.Text = this.merchant.lastName;
+            EntryFirstName.Text = this.merchant.firstName;
+            if (this.merchant.picturePath == null)
             {
                 Portrait.Source = ImageSource.FromResource("Gatherman.images.default_portrait.png");
             }
             else
             {
-                Portrait.Source = new ImageSourceConverter().ConvertFromInvariantString(this.merchant.Portrait) as ImageSource;
+                Portrait.Source = new ImageSourceConverter().ConvertFromInvariantString(this.merchant.picturePath) as ImageSource;
+                picturePath.Text = this.merchant.picturePath;
             }
 
         }
@@ -62,30 +66,65 @@ namespace Gatherman.Views
         {
             if (EditForm == true)
             {
-                this.merchant.Name = EntryName.Text;
-                this.merchant.FirstName = EntryFirstName.Text;
+                this.merchant.lastName = EntryName.Text;
+                this.merchant.firstName = EntryFirstName.Text;
                 
-                if (this.merchant.Portrait != null && portraitFileLocation != null)
+                if (this.merchant.picturePath != null && portraitFileLocation != null)
                 {
                     //TODO si on change la photo, il faut supprimer l'ancien fichier image
-                    this.merchant.Portrait = portraitFileLocation;
+                    this.merchant.picturePath = portraitFileLocation;
                 }
                 await _connection.UpdateAsync(this.merchant);
+                
+        
             }
             else
             {
-                var merchant = new Merchant { Name = EntryName.Text, FirstName = EntryFirstName.Text, Portrait = portraitFileLocation };
+                var merchant = new Merchant { lastName = EntryName.Text, firstName = EntryFirstName.Text, picturePath = portraitFileLocation };
             
                 await _connection.InsertAsync(merchant);
+
+                //Ouverture de la connection
+                var client = new HttpClient();
+                //Ajout du Merchant
+                string URL = "http://jean-surface:3000/api/Merchants";
+                string content = JsonConvert.SerializeObject(merchant);
+                var response = await client.PostAsync(URL,new StringContent(content,Encoding.UTF8,"application/json"));
+                Debug.Write(response);
+
+                //Upload de l'image
+                if (merchant.picturePath != null)
+                {
+                    Uri uri = new Uri("http://jean-surface:3000/api/containers/photos/upload");
+                    using (var webclient = new WebClient())
+                    {
+                        webclient.UploadFileCompleted += new UploadFileCompletedEventHandler((object sender2, UploadFileCompletedEventArgs e2) =>
+                        {
+                            Debug.Write(e2);
+                        });
+
+                        try
+                        {
+                            webclient.UploadFileAsync(uri, merchant.picturePath);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            await DisplayAlert("Erreur", "Une erreur réseau s'est produite: " + ex.Message, "OK");
+                        }
+                    }   
+                    
+                }
+
             }
             
             //_Merchants.Add(merchant);
             await Navigation.PopAsync();
         }
-        private async void OnCancel(object sender, EventArgs e)
+        /*private async void OnCancel(object sender, EventArgs e)
         {
 
-        }
+        }*/
 
         private async void OnCamera(object sender, EventArgs e)
         {
@@ -107,5 +146,17 @@ namespace Gatherman.Views
             }
         }
 
+        private async void OnPickPicture(object sender, EventArgs e)
+            {
+                var mediaOptions = new Plugin.Media.Abstractions.PickMediaOptions
+                {
+                    PhotoSize = PhotoSize.Medium,
+                    CompressionQuality = 80
+                };
+                var file = await CrossMedia.Current.PickPhotoAsync(mediaOptions).ConfigureAwait(true);
+                Portrait.Source = file.Path;
+                portraitFileLocation = Path.GetDirectoryName(file.Path) + "/" + Path.GetFileName(file.Path);
+
+    }
     }
 }

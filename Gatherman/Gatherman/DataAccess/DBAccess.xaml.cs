@@ -47,9 +47,9 @@ namespace Gatherman.DataAccess
             {
                 if (lstVMerchant.SelectedItem != null)
                 {
-                    Merchant item = lstVMerchant.SelectedItem as Merchant;
-                    DisplayAlert(item.FullName, "Vous avez cliqué sur un marchand", "OK");
-                                    lstVMerchant.SelectedItem = null;
+                    //Merchant item = lstVMerchant.SelectedItem as Merchant;
+                    //DisplayAlert(item.FullName, "Vous avez cliqué sur un marchand", "OK");
+                    //                lstVMerchant.SelectedItem = null;
                 }
                 
             };
@@ -58,7 +58,7 @@ namespace Gatherman.DataAccess
 
         private async void OnAdd(object sender, EventArgs e)
         {
-            //var merchant = new Merchant { Name = EntryName.Text , FirstName = EntryFirstName.Text };
+            //var merchant = new Merchant { Name = EntryName.Text , firstName = EntryFirstName.Text };
             //await _connection.InsertAsync(merchant);
             //_Merchants.Add(merchant);
             await Navigation.PushAsync(new MerchantForm() );
@@ -67,7 +67,7 @@ namespace Gatherman.DataAccess
         private async void OnUpdate(object sender, EventArgs e)
         {
             var merchantToUpdate = _Merchants[0];
-            merchantToUpdate.Name += "Updated";
+            merchantToUpdate.lastName += "Updated";
             await _connection.UpdateAsync(merchantToUpdate);
         }
 
@@ -85,5 +85,10 @@ namespace Gatherman.DataAccess
             var merchantToEdit = b.CommandParameter as Merchant;
             await Navigation.PushAsync(new MerchantForm(merchantToEdit));
         }
+        public Command SwipeLeftCommand => new Command(() =>
+        {
+            //do something
+            DisplayAlert("coucou", "Vous avez cliqué sur un marchand", "OK");
+        });
     }
 }

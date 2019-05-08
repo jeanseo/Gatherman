@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Vapolia.Droid.Lib.Effects;
 
 namespace Gatherman.Droid
 {
@@ -18,6 +19,7 @@ namespace Gatherman.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+            PlatformGestureEffect.Init();
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
         }

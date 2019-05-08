@@ -10,12 +10,12 @@ namespace Gatherman.DataAccess.Model
     public class Merchant : INotifyPropertyChanged
     {
         [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
+        public Guid id { get; set; }
 
         private string _name;
 
         [MaxLength(255)]
-        public string Name {
+        public string lastName {
             get { return _name; }
             set
             {
@@ -34,7 +34,7 @@ namespace Gatherman.DataAccess.Model
         private string _firstName;
 
         [MaxLength(255)]
-        public string FirstName
+        public string firstName
         {
             get { return _firstName; }
             set
@@ -53,11 +53,11 @@ namespace Gatherman.DataAccess.Model
 
         public string FullName
         {
-            get { return string.Format("{0} {1}", FirstName, Name); }
+            get { return string.Format("{0} {1}", firstName, lastName); }
         }
         private string _portrait;
 
-        public string Portrait
+        public string picturePath
         {
             get { return _portrait; }
 

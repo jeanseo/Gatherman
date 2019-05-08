@@ -12,7 +12,6 @@ namespace Gatherman
             InitializeComponent();
 
             //MainPage = new NavigationPage(new Gatherman.DataAccess.DBAccess());
-            //MainPage = new Gatherman.MainPage();
             MainPage = new MasterDetailPage()
             {
                 Master = new Gatherman.Views.MasterPage() { Title = "Main Page" },
