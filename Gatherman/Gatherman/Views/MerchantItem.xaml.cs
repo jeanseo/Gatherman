@@ -83,38 +83,8 @@ namespace Gatherman.Views
                 var merchant = new Merchant { lastName = EntryName.Text, firstName = EntryFirstName.Text, picturePath = portraitFileLocation };
             
                 await _connection.InsertAsync(merchant);
-
-                //Ouverture de la connection
-                var client = new HttpClient();
-                //Ajout du Merchant
-                string URL = "http://jean-surface:3000/api/Merchants";
-                string content = JsonConvert.SerializeObject(merchant);
-                var response = await client.PostAsync(URL,new StringContent(content,Encoding.UTF8,"application/json"));
-                Debug.Write(response);
-
-                //Upload de l'image
-                if (merchant.picturePath != null)
-                {
-                    Uri uri = new Uri("http://jean-surface:3000/api/containers/photos/upload");
-                    using (var webclient = new WebClient())
-                    {
-                        webclient.UploadFileCompleted += new UploadFileCompletedEventHandler((object sender2, UploadFileCompletedEventArgs e2) =>
-                        {
-                            Debug.Write(e2);
-                        });
-
-                        try
-                        {
-                            webclient.UploadFileAsync(uri, merchant.picturePath);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            await DisplayAlert("Erreur", "Une erreur réseau s'est produite: " + ex.Message, "OK");
-                        }
-                    }   
-                    
-                }
+                var test = new MerchantService();
+                await test.syncMerchant(merchant);
 
             }
             

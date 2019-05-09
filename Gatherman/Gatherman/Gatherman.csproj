@@ -35,10 +35,16 @@
     <Compile Update="MasterDetailPage1MenuItem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\MerchantItem.xaml.cs">
+      <DependentUpon>MerchantItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\MerchantListView.xaml.cs">
+      <DependentUpon>MerchantListView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="DataAccess\DBAccess.xaml">
+    <EmbeddedResource Update="Views\MerchantListView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="MasterDetailPage1Detail.xaml">
@@ -47,7 +53,7 @@
     <EmbeddedResource Update="Views\MasterPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\MerchantForm.xaml">
+    <EmbeddedResource Update="Views\MerchantItem.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
