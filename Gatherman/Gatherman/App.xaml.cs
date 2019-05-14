@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Gatherman.Data;
+using System;
+using System.Diagnostics;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,7 +12,7 @@ namespace Gatherman
         public App()
         {
             InitializeComponent();
-
+            
             //MainPage = new NavigationPage(new Gatherman.DataAccess.DBAccess());
             MainPage = new MasterDetailPage()
             {
@@ -22,7 +24,7 @@ namespace Gatherman
 
         protected override void OnStart()
         {
-            // Handle when your app starts
+            
         }
 
         protected override void OnSleep()

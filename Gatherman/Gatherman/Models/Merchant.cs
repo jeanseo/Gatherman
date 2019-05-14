@@ -75,6 +75,10 @@ namespace Gatherman.DataAccess.Model
             }
         }
 
+        public DateTime lastUpdated { get; set; }
+        public DateTime creationDate { get; set; }
+        public Boolean deleted { get; set; }
+
         private void OnPropertyChanged([CallerMemberName] string PropertyName=null)
         {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));

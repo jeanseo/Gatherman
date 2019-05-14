@@ -68,23 +68,27 @@ namespace Gatherman.Views
             {
                 this.merchant.lastName = EntryName.Text;
                 this.merchant.firstName = EntryFirstName.Text;
-                
+                this.merchant.lastUpdated = DateTime.UtcNow;
+
                 if (this.merchant.picturePath != null && portraitFileLocation != null)
                 {
                     //TODO si on change la photo, il faut supprimer l'ancien fichier image
                     this.merchant.picturePath = portraitFileLocation;
                 }
                 await _connection.UpdateAsync(this.merchant);
-                
-        
+                //var merchantService = new MerchantService();
+                //await merchantService.syncMerchant();
+
+
             }
             else
             {
-                var merchant = new Merchant { lastName = EntryName.Text, firstName = EntryFirstName.Text, picturePath = portraitFileLocation };
+                var merchant = new Merchant { lastName = EntryName.Text, firstName = EntryFirstName.Text, picturePath = portraitFileLocation, creationDate = DateTime.UtcNow, lastUpdated = DateTime.UtcNow, deleted = false
+            };
             
                 await _connection.InsertAsync(merchant);
-                var test = new MerchantService();
-                await test.syncMerchant(merchant);
+                var merchantService = new MerchantService();
+                await merchantService.syncMerchant();
 
             }
             

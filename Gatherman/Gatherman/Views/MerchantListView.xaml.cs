@@ -18,6 +18,9 @@ namespace Gatherman.DataAccess
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class DBAccess : ContentPage
 	{
+
+
+
         //Déclaration de la liaison avec la base de données
         private SQLiteAsyncConnection _connection;
         // Liste (Collection d'objets) qui va apparaitre dans le Xaml
@@ -33,12 +36,23 @@ namespace Gatherman.DataAccess
         //Au chargement de la page
         protected override async void OnAppearing()
         {
+            // Handle when your app starts
+            //Si c'est le premier lancement, il faut faire une requête get sur l'api
+            var merchantService = new MerchantService();
+            await merchantService.initializeMerchantList();
+
+
             //On crée la table Merchant avec un objet Merchant
             await _connection.CreateTableAsync<Merchant>();
             //On crée une liste qui va récupérer les informations de la base de données (attente de la connexion)
             var MerchantList = await _connection.Table<Merchant>().ToListAsync();
+
+//            var merchantService = new MerchantService();
+//            await merchantService.syncMerchant();
+
             //On crée la collection de'objets Merchant
             _Merchants = new ObservableCollection<Merchant>(MerchantList);
+
             //On passe la liste de Merchant vers le Xaml
             lstVMerchant.ItemsSource = _Merchants;
             base.OnAppearing();
@@ -63,14 +77,6 @@ namespace Gatherman.DataAccess
             //_Merchants.Add(merchant);
             await Navigation.PushAsync(new MerchantForm() );
         }
-
-        private async void OnUpdate(object sender, EventArgs e)
-        {
-            var merchantToUpdate = _Merchants[0];
-            merchantToUpdate.lastName += "Updated";
-            await _connection.UpdateAsync(merchantToUpdate);
-        }
-
         private async void OnDelete(object sender, EventArgs e)
         {
             var b = ((Button)sender);
