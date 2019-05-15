@@ -77,7 +77,16 @@ namespace Gatherman.DataAccess.Model
 
         public DateTime lastUpdated { get; set; }
         public DateTime creationDate { get; set; }
-        public Boolean deleted { get; set; }
+        private Boolean _deleted;
+        public Boolean deleted {
+            get { return _deleted; }
+            set
+            {
+                if (_deleted == value) return;
+                _deleted = value;
+                OnPropertyChanged();
+            }
+        }
 
         private void OnPropertyChanged([CallerMemberName] string PropertyName=null)
         {

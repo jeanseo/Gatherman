@@ -87,8 +87,8 @@ namespace Gatherman.Views
             };
             
                 await _connection.InsertAsync(merchant);
-                var merchantService = new MerchantService();
-                await merchantService.syncMerchant();
+                //var merchantService = new MerchantService();
+                //await merchantService.syncMerchant();
 
             }
             

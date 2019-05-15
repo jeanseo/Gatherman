@@ -18,7 +18,11 @@
         <StackLayout>
             <StackLayout Orientation="Horizontal">
             </StackLayout>
-            <ListView x:Name="lstVMerchant" ui:Gesture.SwipeLeftCommand="{Binding SwipeLeftCommand}" IsEnabled="True" InputTransparent="False">
+            <ListView x:Name="lstVMerchant"
+                      IsPullToRefreshEnabled="True"
+                      ui:Gesture.SwipeLeftCommand="{Binding SwipeLeftCommand}"
+                      IsEnabled="True"
+                      InputTransparent="False">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
