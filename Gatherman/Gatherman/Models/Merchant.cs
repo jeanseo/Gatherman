@@ -4,13 +4,15 @@ using System.Text;
 using SQLite;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Gatherman.DataAccess.Model
 {
     public class Merchant : INotifyPropertyChanged
     {
-        [PrimaryKey, AutoIncrement]
-        public Guid id { get; set; }
+        [PrimaryKey]
+        public Guid id { get; set;}
 
         private string _name;
 

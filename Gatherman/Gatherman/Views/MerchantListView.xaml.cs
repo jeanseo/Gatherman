@@ -43,29 +43,25 @@ namespace Gatherman.DataAccess
             InitializeComponent();
             //Si c'est le premier lancement, il faut faire une requête get sur l'api
             var merchantService = new MerchantService();
-            var merchantList = new List<Merchant>();
+            //var merchantList = new List<Merchant>();
             
 
             if (!Application.Current.Properties.ContainsKey(Constants.KEY_LASTSYNC) || Application.Current.Properties[Constants.KEY_LASTSYNC] == null)
             {
                 await merchantService.initializeMerchantList();
 
-                _Merchants = new ObservableCollection<Merchant>(merchantList);
-                lstVMerchant.ItemsSource = _Merchants;
-
             }
             else
             {
-                await merchantService.syncMerchant((response)=> {
-                    //On crée la collection de'objets Merchant
-                    merchantList = response;
-                    _Merchants = new ObservableCollection<Merchant>(merchantList);
-                    lstVMerchant.ItemsSource = _Merchants;
-                    //On passe la liste de Merchant vers le Xaml
-
-                });
+                await merchantService.syncMerchant();
 
             }
+            _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
+            var MerchantList = new List<Merchant>();
+            MerchantList.AddRange(await _connection.QueryAsync<Merchant>("SELECT * FROM Merchant WHERE deleted=?", false));
+            _Merchants = new ObservableCollection<Merchant>(MerchantList);
+            Debug.Write("----------\n" + JsonConvert.SerializeObject(MerchantList));
+            lstVMerchant.ItemsSource = _Merchants;
 
 
             //On crée la table Merchant avec un objet Merchant
@@ -78,7 +74,7 @@ namespace Gatherman.DataAccess
             //            await merchantService.syncMerchant();
 
 
-            base.OnAppearing();
+            
 
 
             //test de sélection d'un item
@@ -93,24 +89,18 @@ namespace Gatherman.DataAccess
                 
             };
 
-           /* lstVMerchant.RefreshCommand = new Command((obj) =>
+            lstVMerchant.RefreshCommand = new Command((obj) =>
             {
                 Debug.Write("RefreshCommand");
-                merchantService.syncMerchant((response)=> {
-                    lstVMerchant.ItemsSource = response;
-                    lstVMerchant.IsRefreshing = false;
-
-                });
-                
-            });*/
+                merchantService.syncMerchant();
+                lstVMerchant.ItemsSource = _Merchants;
+                lstVMerchant.IsRefreshing = false;
+            });
 
         }
 
         private async void OnAdd(object sender, EventArgs e)
         {
-            //var merchant = new Merchant { Name = EntryName.Text , firstName = EntryFirstName.Text };
-            //await _connection.InsertAsync(merchant);
-            //_Merchants.Add(merchant);
             await Navigation.PushAsync(new MerchantForm() );
         }
         private async void OnDelete(object sender, EventArgs e)

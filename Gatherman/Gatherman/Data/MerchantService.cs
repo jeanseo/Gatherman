@@ -30,7 +30,7 @@ namespace Gatherman.Data
             public List<Merchant> localChanges { get; set; }
         }
 
-        public async Task initializeMerchantList(Action<List<Merchant>> action)
+        public async Task initializeMerchantList()
         {
 
             
@@ -43,25 +43,22 @@ namespace Gatherman.Data
                 response.EnsureSuccessStatusCode();
             }
             string responseBody = await response.Content.ReadAsStringAsync();
-            Debug.Write(responseBody);
             var merchantList = new List<Merchant>();
             merchantList = JsonConvert.DeserializeObject<List<Merchant>>(responseBody);
             //Connection et ajout à la BDD locale
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
+            Debug.Write("------à insérer-------\n" + JsonConvert.SerializeObject(merchantList));
             await _connection.CreateTableAsync<Merchant>();
-            await _connection.InsertAllAsync(merchantList);
-            //On vérifie que la donnée lastSync existe, dans le cas contraire on la crée
+            int rows = await _connection.InsertAllAsync(merchantList);
+            Debug.Write("------"+rows+" lignes insérées-------\n" + JsonConvert.SerializeObject(merchantList));
+            //On crée la donnée lastSync
             Application.Current.Properties[Constants.KEY_LASTSYNC] = DateTime.UtcNow;
             await Application.Current.SavePropertiesAsync();
             Debug.Write("fin de l'initialisation");
-
-            Device.BeginInvokeOnMainThread(() => {
-                    action.Invoke(merchantList);
-                });
-
+           
         }
 
-        public async Task syncMerchant(Action<List<Merchant>> action)
+        public async Task syncMerchant()
         {
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
             await _connection.CreateTableAsync<Merchant>();
@@ -71,6 +68,7 @@ namespace Gatherman.Data
             {
                 lastSync = (DateTime)Application.Current.Properties[Constants.KEY_LASTSYNC];
             }
+            Debug.Write("lastSync: " + lastSync);
             //Déclaration d'une liste local change
             var postChanges = new SyncApiPostObject();
             postChanges.lastSync = lastSync;
@@ -89,19 +87,33 @@ namespace Gatherman.Data
 
                 //Push vers l'API
                 string content = JsonConvert.SerializeObject(postChanges);
-                Debug.Write(content);
+                Debug.Write("--------Requête JSON-------"+content);
 
                 response = await client.PostAsync("http://jean-surface:3000/api/Merchants/push", new StringContent(content, Encoding.UTF8, "application/json"));
             }
                     // Handle success
                     string responseBody = await response.Content.ReadAsStringAsync();
                     var responseObject = JsonConvert.DeserializeObject<SyncApiReturnObject>(responseBody);
-                        
+
+            //Verification du retour
+            try
+            {
+                Debug.Write("----TO UPDATE------\n" + JsonConvert.SerializeObject(responseObject.toUpdate));
+                Debug.Write("----TO INSERT------\n" + JsonConvert.SerializeObject(responseObject.toInsert));
+                if (responseObject.toUpdate != null)
+                    await _connection.UpdateAllAsync(responseObject.toUpdate);
+                if (responseObject.toInsert != null)
+                    await _connection.InsertAllAsync(responseObject.toInsert);
+            }
+            catch (Exception ex)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Application.Current.MainPage.DisplayAlert("Erreur", "Une erreur s'est produite dans la récupération de données" + ex.Message, "OK");
+                });
+            }
             //Faire les requêtes insert et update en local
-            if (responseObject.toUpdate!=null)
-                await _connection.UpdateAllAsync(responseObject.toUpdate);
-            if (responseObject.toInsert != null)
-                await _connection.InsertAllAsync(responseObject.toInsert);
+            
 
 
 
@@ -137,13 +149,6 @@ namespace Gatherman.Data
             //On met à jour la date de lastSync
             Application.Current.Properties[Constants.KEY_LASTSYNC] = DateTime.UtcNow;
             await Application.Current.SavePropertiesAsync();
-            var MerchantList = new List<Merchant>();
-            MerchantList.AddRange(await _connection.QueryAsync<Merchant>("SELECT * FROM Merchant WHERE deleted=?", false));
-            Debug.Write("\n" + JsonConvert.SerializeObject(MerchantList));
-
-            Device.BeginInvokeOnMainThread(() => {
-                action.Invoke(MerchantList);
-            });
 
         }
 
