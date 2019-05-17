@@ -22,6 +22,8 @@ namespace Gatherman.Data
         {
             public List<Merchant> toInsert { get; set; }
             public List<Merchant> toUpdate { get; set; }
+            public List<string> picToUpload { get; set; }
+            public List<string> picToDownload { get; set; }
         }
 
         public async Task initializeMerchantList()
