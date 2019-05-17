@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Gatherman.Views.LoginPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Entry Placeholder="login"
+                   x:Name="userNameEntry"
+                   />
+            <Entry Placeholder="Password"
+                   x:Name="passwordEntry"
+                   IsPassword="True"
+                   />
+            <Button Text="Connexion" Command="{Binding AuthenticateCommand}"
+                    Clicked="OnLogin"
+                    />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

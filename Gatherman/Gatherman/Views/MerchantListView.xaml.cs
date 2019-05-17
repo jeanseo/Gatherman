@@ -20,8 +20,8 @@ namespace Gatherman.DataAccess
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class DBAccess : ContentPage
 	{
-
-
+        //Si on est pas déjà connecté, on fait apparaitre la page de connexion
+        
 
         //Déclaration de la liaison avec la base de données
         private SQLiteAsyncConnection _connection;
@@ -41,6 +41,7 @@ namespace Gatherman.DataAccess
         protected override async void OnAppearing()
         {
             InitializeComponent();
+            
             //Si c'est le premier lancement, il faut faire une requête get sur l'api
             var merchantService = new MerchantService();
             //var merchantList = new List<Merchant>();
