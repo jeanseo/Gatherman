@@ -12,9 +12,16 @@ using Xamarin.Forms.Xaml;
 
 namespace Gatherman.Views
 {
+
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class LoginPage : ContentPage
 	{
+        private struct LoginAPIPostObject
+        {
+            public string username { get; set; }
+            public string password { get; set; }
+        }
+
         public Models.User loggedUser;
 
         public LoginPage (Models.User _loggedUser)
@@ -41,8 +48,11 @@ namespace Gatherman.Views
             {
                 Debug.Write(loggedUser.id);
                 Application.Current.Properties[Constants.KEY_CONNECTED] = true;
+                //await loggedUser.SaveUser();
+                string userToSave = JsonConvert.SerializeObject(loggedUser);
+                Application.Current.Properties[Constants.KEY_CREDENTIALS] = userToSave;
                 await Application.Current.SavePropertiesAsync();
-
+                Debug.Write("----------------\n" + Application.Current.Properties[Constants.KEY_CREDENTIALS]);
                 await Navigation.PushModalAsync(App.mainPage(loggedUser));
                 //Device.BeginInvokeOnMainThread(() => App.Current.MainPage = MainPage);
             }
@@ -56,8 +66,7 @@ namespace Gatherman.Views
         public async Task<bool> isAuthenticated()
         {
             HttpResponseMessage response = null;
-            //LoginAPIPostObject body = new LoginAPIPostObject { username = username, password = password };
-            //User loggedUser = new User { username = username, password = password };
+            LoginAPIPostObject body = new LoginAPIPostObject { username = loggedUser.username, password = loggedUser.password };
             try
             {
 
@@ -74,6 +83,9 @@ namespace Gatherman.Views
                 // Handle success
                 string responseBody = await response.Content.ReadAsStringAsync();
                 loggedUser = JsonConvert.DeserializeObject<User>(responseBody);
+                //On réécrie les username et password qui ont été effacés par le retour de la requête
+                loggedUser.username = body.username;
+                loggedUser.password = body.password;
                 Debug.Write("--------Réponse requête-------" + loggedUser.id);
             }
             catch (Exception ex)

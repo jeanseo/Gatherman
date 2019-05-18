@@ -59,8 +59,9 @@ namespace Gatherman.Data
            
         }
 
-        public async Task syncMerchant()
+        public async Task syncMerchant(Models.User _user)
         {
+            loggedUser = _user;
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
             await _connection.CreateTableAsync<Merchant>();
 
@@ -89,6 +90,7 @@ namespace Gatherman.Data
                 //Push vers l'API
                 string content = JsonConvert.SerializeObject(postChanges);
                 Debug.Write("--------Requête JSON-------"+content);
+                Debug.Write("--------Requête JSON-------" + loggedUser.id);
 
                 response = await client.PostAsync("http://jean-surface:3000/api/Merchants/push?access_token=" + loggedUser.id, new StringContent(content, Encoding.UTF8, "application/json"));
             }

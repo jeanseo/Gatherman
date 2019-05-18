@@ -54,7 +54,7 @@ namespace Gatherman.DataAccess
             }
             else
             {
-                await merchantService.syncMerchant();
+                await merchantService.syncMerchant(loggedUser);
 
             }
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
@@ -93,7 +93,7 @@ namespace Gatherman.DataAccess
             lstVMerchant.RefreshCommand = new Command((obj) =>
             {
                 Debug.Write("RefreshCommand");
-                merchantService.syncMerchant();
+                merchantService.syncMerchant(loggedUser);
                 lstVMerchant.ItemsSource = _Merchants;
                 lstVMerchant.IsRefreshing = false;
             });

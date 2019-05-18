@@ -21,14 +21,6 @@ namespace Gatherman.Models
         public int ttl { get; set; }
         public DateTime created { get; set; }
         public int userId { get; set; }
-
-        private struct LoginAPIPostObject
-        {
-            public string username { get; set; }
-            public string password { get; set; }
-        }
-
-
         
 
     }

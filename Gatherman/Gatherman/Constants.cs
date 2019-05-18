@@ -9,5 +9,6 @@ namespace Gatherman
         public const string PostPictureURL = BaseAddress + "containers/photos/upload";
         public const string KEY_LASTSYNC = "lastSync";
         public const string KEY_CONNECTED = "connected";
+        public const string KEY_CREDENTIALS = "credentials";
     }
 }
