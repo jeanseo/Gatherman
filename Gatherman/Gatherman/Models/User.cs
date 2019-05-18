@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,12 +17,19 @@ namespace Gatherman.Models
         public string username { get; set; }
         public string email { get; set; }
         public string password { get; set; }
+        public string id { get; set; }
+        public int ttl { get; set; }
+        public DateTime created { get; set; }
+        public int userId { get; set; }
 
-        public async Task<bool> isAuthenticated()
+        private struct LoginAPIPostObject
         {
-            Thread.Sleep(5000); // Do work
-            return true;
+            public string username { get; set; }
+            public string password { get; set; }
         }
+
+
+        
 
     }
 

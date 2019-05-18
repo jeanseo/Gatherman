@@ -21,18 +21,18 @@ namespace Gatherman.DataAccess
 	public partial class DBAccess : ContentPage
 	{
         //Si on est pas déjà connecté, on fait apparaitre la page de connexion
-        
+        public Models.User loggedUser;
 
         //Déclaration de la liaison avec la base de données
         private SQLiteAsyncConnection _connection;
         // Liste (Collection d'objets) qui va apparaitre dans le Xaml
         private ObservableCollection<Merchant> _Merchants;
 
-		public DBAccess ()
+		public DBAccess (Models.User _user)
 		{
+            loggedUser = _user;
             // Je crée ma connection avec la base de données
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
-
            
 
 		}
@@ -49,7 +49,7 @@ namespace Gatherman.DataAccess
 
             if (!Application.Current.Properties.ContainsKey(Constants.KEY_LASTSYNC) || Application.Current.Properties[Constants.KEY_LASTSYNC] == null)
             {
-                await merchantService.initializeMerchantList();
+                await merchantService.initializeMerchantList(loggedUser);
 
             }
             else

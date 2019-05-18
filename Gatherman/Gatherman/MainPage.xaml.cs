@@ -13,8 +13,9 @@ namespace Gatherman
     {
         public MainPage()
         {
+            Models.User user = new Models.User();
             InitializeComponent();
-            Detail = new NavigationPage(new Gatherman.DataAccess.DBAccess());
+            Detail = new NavigationPage(new Gatherman.DataAccess.DBAccess(user));
             IsPresented = false;
         }
     }

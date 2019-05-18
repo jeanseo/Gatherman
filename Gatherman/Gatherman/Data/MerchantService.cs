@@ -14,6 +14,8 @@ namespace Gatherman.Data
 {
     public class MerchantService
     {
+        public Models.User loggedUser;
+
         //Déclaration de la liaison avec la base de données
         private SQLiteAsyncConnection _connection;
         private DateTime lastSync;
@@ -30,16 +32,15 @@ namespace Gatherman.Data
             public List<Merchant> localChanges { get; set; }
         }
 
-        public async Task initializeMerchantList()
+        public async Task initializeMerchantList(Models.User _user)
         {
-
-            
+            loggedUser = _user;
             //On récupère les données depuis l'API
             //Ouverture de la connection et requête
             HttpResponseMessage response = null;
             using (var client = new HttpClient())
             {
-                response = await client.GetAsync("http://jean-surface:3000/api/Merchants?filter=%7B%22where%22%3A%7B%22deleted%22%3A%22false%22%7D%7D");
+                response = await client.GetAsync("http://jean-surface:3000/api/Merchants?filter=%7B%22where%22%3A%7B%22deleted%22%3A%22false%22%7D%7D&access_token=" + loggedUser.id);
                 response.EnsureSuccessStatusCode();
             }
             string responseBody = await response.Content.ReadAsStringAsync();
@@ -89,7 +90,7 @@ namespace Gatherman.Data
                 string content = JsonConvert.SerializeObject(postChanges);
                 Debug.Write("--------Requête JSON-------"+content);
 
-                response = await client.PostAsync("http://jean-surface:3000/api/Merchants/push", new StringContent(content, Encoding.UTF8, "application/json"));
+                response = await client.PostAsync("http://jean-surface:3000/api/Merchants/push?access_token=" + loggedUser.id, new StringContent(content, Encoding.UTF8, "application/json"));
             }
                     // Handle success
                     string responseBody = await response.Content.ReadAsStringAsync();
