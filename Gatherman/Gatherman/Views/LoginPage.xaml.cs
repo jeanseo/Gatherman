@@ -16,23 +16,36 @@ namespace Gatherman.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class LoginPage : ContentPage
 	{
-        private struct LoginAPIPostObject
-        {
-            public string username { get; set; }
-            public string password { get; set; }
-        }
+        
 
         public Models.User loggedUser;
 
         public LoginPage (Models.User _loggedUser)
 		{
             loggedUser = _loggedUser;
-
-            InitializeComponent ();
-            userNameEntry.Completed += (sender, args) => { passwordEntry.Focus(); };
+            //Si on a déjà été connecté
+            
             //Lorsque OK après le mot de passe, on s'identifie
             //passwordEntry.Completed += (sender, args) => { ViewModel.AuthenticateCommand.Execute(null); };
             
+        }
+
+        protected override async void OnAppearing()
+        {
+            if (loggedUser.username != null && loggedUser.password != null)
+            {
+                //On tente de se reconnecter avec les memes identifiants
+                bool isConnected = await loggedUser.isAuthenticated();
+
+                if (isConnected)
+                {
+                    Application.Current.MainPage = App.mainPage(loggedUser);
+                }
+            }
+            InitializeComponent();
+
+            userNameEntry.Completed += (sender, args) => { passwordEntry.Focus(); };
+
         }
 
 
@@ -43,7 +56,7 @@ namespace Gatherman.Views
         {
             loggedUser.username = userNameEntry.Text;
             loggedUser.password = passwordEntry.Text;
-            var authenticatedOK = await isAuthenticated();
+            var authenticatedOK = await loggedUser.isAuthenticated();
             if (authenticatedOK)
             {
                 Debug.Write(loggedUser.id);
@@ -53,8 +66,9 @@ namespace Gatherman.Views
                 Application.Current.Properties[Constants.KEY_CREDENTIALS] = userToSave;
                 await Application.Current.SavePropertiesAsync();
                 Debug.Write("----------------\n" + Application.Current.Properties[Constants.KEY_CREDENTIALS]);
-                await Navigation.PushModalAsync(App.mainPage(loggedUser));
+                //await Navigation.PushModalAsync(App.mainPage(loggedUser));
                 //Device.BeginInvokeOnMainThread(() => App.Current.MainPage = MainPage);
+                Application.Current.MainPage = App.mainPage(loggedUser);
             }
             else
             {
@@ -62,40 +76,6 @@ namespace Gatherman.Views
             }
             
             
-        }
-        public async Task<bool> isAuthenticated()
-        {
-            HttpResponseMessage response = null;
-            LoginAPIPostObject body = new LoginAPIPostObject { username = loggedUser.username, password = loggedUser.password };
-            try
-            {
-
-
-                using (var client = new HttpClient())
-                {
-                    //Push vers l'API
-                    Debug.Write(loggedUser.username);
-                    string content = JsonConvert.SerializeObject(loggedUser);
-                    Debug.Write("--------Requête JSON-------" + content);
-
-                    response = await client.PostAsync("http://jean-surface:3000/api/Users/login", new StringContent(content, Encoding.UTF8, "application/json"));
-                }
-                // Handle success
-                string responseBody = await response.Content.ReadAsStringAsync();
-                loggedUser = JsonConvert.DeserializeObject<User>(responseBody);
-                //On réécrie les username et password qui ont été effacés par le retour de la requête
-                loggedUser.username = body.username;
-                loggedUser.password = body.password;
-                Debug.Write("--------Réponse requête-------" + loggedUser.id);
-            }
-            catch (Exception ex)
-            {
-                Debug.Write("--------ERREUR---------\n" + ex);
-                return false;
-
-            }
-
-            return true;
         }
     }
     

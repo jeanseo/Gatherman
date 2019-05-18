@@ -30,10 +30,17 @@ namespace Gatherman
                 Application.Current.Properties[Constants.KEY_CREDENTIALS] = null;
                 Application.Current.SavePropertiesAsync();
             }
-
+            loggedUser = new Models.User();
             InitializeComponent();
             //Si on est déjà connecté
-            if((bool)Application.Current.Properties[Constants.KEY_CONNECTED])
+            MainPage = new Views.LoginPage(loggedUser);
+
+        }
+        
+        protected async override void OnStart()
+        {
+            /*
+            if ((bool)Application.Current.Properties[Constants.KEY_CONNECTED])
             {
                 //TODO Récupérer les identifiants stockés
                 string jsonUser = (string)Application.Current.Properties[Constants.KEY_CREDENTIALS];
@@ -42,7 +49,16 @@ namespace Gatherman
                 Debug.Write("-----DONNEES TRAITEES------\n" + loggedUser.id);
 
                 //TODO Tenter de se connecter avec les identifiants stockés
-                MainPage = mainPage(loggedUser);
+                bool isConnected = await loggedUser.isAuthenticated();
+
+                if (isConnected)
+                {
+                    MainPage = mainPage(loggedUser);
+                }
+                else
+                {
+                    MainPage = new Views.LoginPage(loggedUser);
+                }
 
             }
             //Si on est pas encore connecté
@@ -52,12 +68,7 @@ namespace Gatherman
 
                 MainPage = new Views.LoginPage(loggedUser);
             }
-
-        }
-        
-        protected override void OnStart()
-        {
-            
+            */
         }
 
         protected override void OnSleep()

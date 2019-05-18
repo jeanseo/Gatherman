@@ -77,7 +77,6 @@ namespace Gatherman.Data
 
             var localChanges = new List<Merchant>();
             //Connection à la BDD locale
-            _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
             localChanges.AddRange(await _connection.QueryAsync<Merchant>("SELECT * FROM Merchant WHERE lastUpdated > ?", lastSync));
             Debug.Write("\n"+JsonConvert.SerializeObject(localChanges));
             postChanges.localChanges = localChanges;

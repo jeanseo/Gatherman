@@ -62,7 +62,9 @@ namespace Gatherman.DataAccess
             MerchantList.AddRange(await _connection.QueryAsync<Merchant>("SELECT * FROM Merchant WHERE deleted=?", false));
             _Merchants = new ObservableCollection<Merchant>(MerchantList);
             Debug.Write("----------\n" + JsonConvert.SerializeObject(MerchantList));
+            lstVMerchant.ItemsSource = null;
             lstVMerchant.ItemsSource = _Merchants;
+
 
 
             //On crée la table Merchant avec un objet Merchant
@@ -75,7 +77,7 @@ namespace Gatherman.DataAccess
             //            await merchantService.syncMerchant();
 
 
-            
+
 
 
             //test de sélection d'un item
