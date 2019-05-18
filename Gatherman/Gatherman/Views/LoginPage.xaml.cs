@@ -35,9 +35,8 @@ namespace Gatherman.Views
             if (loggedUser.username != null && loggedUser.password != null)
             {
                 //On tente de se reconnecter avec les memes identifiants
-                bool isConnected = await loggedUser.isAuthenticated();
-
-                if (isConnected)
+                var authenticatedResult = await loggedUser.isAuthenticated();
+                if (authenticatedResult == 200)
                 {
                     Application.Current.MainPage = App.mainPage(loggedUser);
                 }
@@ -56,8 +55,8 @@ namespace Gatherman.Views
         {
             loggedUser.username = userNameEntry.Text;
             loggedUser.password = passwordEntry.Text;
-            var authenticatedOK = await loggedUser.isAuthenticated();
-            if (authenticatedOK)
+            var authenticatedResult = await loggedUser.isAuthenticated();
+            if (authenticatedResult == 200)
             {
                 Debug.Write(loggedUser.id);
                 Application.Current.Properties[Constants.KEY_CONNECTED] = true;
@@ -72,7 +71,7 @@ namespace Gatherman.Views
             }
             else
             {
-                await DisplayAlert("Erreur", "le login ou le mot de passe est incorrect", "OK");
+                await DisplayAlert("Erreur", authenticatedResult.ToString(), "OK");
             }
             
             

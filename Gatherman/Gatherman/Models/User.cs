@@ -67,7 +67,7 @@ namespace Gatherman.Models
 
         }
 
-        public async Task<bool> isAuthenticated()
+        public async Task<int> isAuthenticated()
         {
             HttpResponseMessage response = null;
             LoginAPIPostObject body = new LoginAPIPostObject { username = this.username, password = this.password };
@@ -82,27 +82,34 @@ namespace Gatherman.Models
                     string content = JsonConvert.SerializeObject(this);
                     Debug.Write("--------Requête JSON-------" + content);
 
-                    response = await client.PostAsync("http://jean-surface:3000/api/Users/login", new StringContent(content, Encoding.UTF8, "application/json"));
+                    response = await client.PostAsync(Constants.PostLoginURL, new StringContent(content, Encoding.UTF8, "application/json"));
                 }
-                // Handle success
-                string responseBody = await response.Content.ReadAsStringAsync();
-                LoginAPIResponseObject loggedUser = JsonConvert.DeserializeObject<LoginAPIResponseObject>(responseBody);
-                //On réécrie les username et password qui ont été effacés par le retour de la requête
-                id = loggedUser.id;
-                ttl = loggedUser.ttl;
-                created = loggedUser.created;
-                created = loggedUser.created;
+                if (response.IsSuccessStatusCode)
+                {
+                    // Handle success
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    LoginAPIResponseObject loggedUser = JsonConvert.DeserializeObject<LoginAPIResponseObject>(responseBody);
+                    //On réécrie les username et password qui ont été effacés par le retour de la requête
+                    id = loggedUser.id;
+                    ttl = loggedUser.ttl;
+                    created = loggedUser.created;
+                    created = loggedUser.created;
+                    return 200;
+                }
+                else
+                {
+                    return (int)response.StatusCode;
+                }
+                
 
-                Debug.Write("--------Réponse requête-------" + loggedUser.id);
             }
             catch (Exception ex)
             {
                 Debug.Write("--------ERREUR---------\n" + ex);
-                return false;
 
             }
+            return 0;
 
-            return true;
         }
 
     }
