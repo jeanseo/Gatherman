@@ -4,6 +4,7 @@ using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -24,6 +25,7 @@ namespace Gatherman.Data
         {
             public List<Merchant> toInsert { get; set; }
             public List<Merchant> toUpdate { get; set; }
+            public DateTime lastSync { get; set; }
         }
 
         private struct SyncApiPostObject
@@ -73,52 +75,79 @@ namespace Gatherman.Data
             Debug.Write("lastSync: " + lastSync);
             //Déclaration d'une liste local change
             var postChanges = new SyncApiPostObject();
+
             postChanges.lastSync = lastSync;
 
             var localChanges = new List<Merchant>();
-            //Connection à la BDD locale
+            //Connection à la BDD locale, on cherche tout ce qui a été modifié en local depuis la dernière synchro
             localChanges.AddRange(await _connection.QueryAsync<Merchant>("SELECT * FROM Merchant WHERE lastUpdated > ?", lastSync));
             Debug.Write("\n"+JsonConvert.SerializeObject(localChanges));
             postChanges.localChanges = localChanges;
 
             //Ouverture de la connection et requête
             HttpResponseMessage response = null;
-            using (var client = new HttpClient())
-            {
-
-                //Push vers l'API
-                string content = JsonConvert.SerializeObject(postChanges);
-                Debug.Write("--------Requête JSON-------"+content);
-                Debug.Write("--------Requête JSON-------" + loggedUser.id);
-
-                response = await client.PostAsync("http://jean-surface:3000/api/Merchants/push?access_token=" + loggedUser.id, new StringContent(content, Encoding.UTF8, "application/json"));
-            }
-                    // Handle success
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    var responseObject = JsonConvert.DeserializeObject<SyncApiReturnObject>(responseBody);
-
-            //Verification du retour
+            string responseBody = null;
             try
             {
+                using (var client = new HttpClient())
+                    {
+
+                        //Push vers l'API
+                        string content = JsonConvert.SerializeObject(postChanges);
+                        Debug.Write("--------Requête JSON-------"+content);
+                        Debug.Write("--------Requête JSON-------" + loggedUser.id);
+
+                        response = await client.PostAsync(Constants.PostPushURL + loggedUser.id, new StringContent(content, Encoding.UTF8, "application/json"));
+                    }
+                            // Handle success
+                            responseBody = await response.Content.ReadAsStringAsync();
+                Debug.Write("\n------RETOUR JSON DU PUSH------\n" + responseBody);
+            }
+            catch(Exception ex)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Debug.Write(ex.ToString());
+                    Application.Current.MainPage.DisplayAlert("Erreur", "Une erreur s'est produite dans  la récupération de données" + ex.Message, "OK");
+                });
+            }
+            
+            //Verification du retour
+            //Faire les requêtes insert et update en local
+
+            try
+            {
+                var responseObject = JsonConvert.DeserializeObject<SyncApiReturnObject>(responseBody);
+
                 Debug.Write("----TO UPDATE------\n" + JsonConvert.SerializeObject(responseObject.toUpdate));
                 Debug.Write("----TO INSERT------\n" + JsonConvert.SerializeObject(responseObject.toInsert));
-                if (responseObject.toUpdate != null)
+                if (responseObject.toUpdate.Any())
+                {
+                    Debug.Write("\n-----nombre d'update----" + responseObject.toUpdate.Count());
                     await _connection.UpdateAllAsync(responseObject.toUpdate);
-                if (responseObject.toInsert != null)
+                }
+                    
+                if (responseObject.toInsert.Any())
+                {
+                    Debug.Write("\n-----nombre d'insert----" + responseObject.toInsert.Count());
                     await _connection.InsertAllAsync(responseObject.toInsert);
+                }
+                    
+                //On met à jour la date de lastSync
+                Debug.Write("\n-------DATE RENVOYEE------\n" + responseObject.lastSync.ToString());
+                Application.Current.Properties[Constants.KEY_LASTSYNC] = responseObject.lastSync;
+                await Application.Current.SavePropertiesAsync();
             }
             catch (Exception ex)
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    Application.Current.MainPage.DisplayAlert("Erreur", "Une erreur s'est produite dans la récupération de données" + ex.Message, "OK");
+                    Debug.Write(ex.ToString());
+                    Application.Current.MainPage.DisplayAlert("Erreur", "Une erreur s'est produite dans l'écriture de données locales" + ex.Message, "OK");
+
                 });
             }
-            //Faire les requêtes insert et update en local
             
-
-
-
             // Requête delete, on récupère dans la liste insert ceux qui sont deleted, et on les delete de la base locale
             //on recherche les objets à supprimer
 
@@ -148,9 +177,7 @@ namespace Gatherman.Data
 
             }
             */
-            //On met à jour la date de lastSync
-            Application.Current.Properties[Constants.KEY_LASTSYNC] = DateTime.UtcNow;
-            await Application.Current.SavePropertiesAsync();
+
 
         }
 

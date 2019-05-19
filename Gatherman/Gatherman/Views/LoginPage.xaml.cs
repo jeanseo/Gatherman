@@ -44,6 +44,7 @@ namespace Gatherman.Views
             InitializeComponent();
 
             userNameEntry.Completed += (sender, args) => { passwordEntry.Focus(); };
+            passwordEntry.Completed += (sender, args) => { OnLogin(sender, args); };
 
         }
 

@@ -68,7 +68,7 @@ namespace Gatherman.Views
             {
                 this.merchant.lastName = EntryName.Text;
                 this.merchant.firstName = EntryFirstName.Text;
-                this.merchant.lastUpdated = DateTime.UtcNow;
+                this.merchant.lastUpdated = DateTime.Now;
 
                 if (this.merchant.picturePath != null && portraitFileLocation != null)
                 {
@@ -85,7 +85,7 @@ namespace Gatherman.Views
             {
                 Guid id = Guid.NewGuid();
                 Debug.Write(id);
-                var merchant = new Merchant { lastName = EntryName.Text, firstName = EntryFirstName.Text, picturePath = portraitFileLocation, creationDate = DateTime.UtcNow, lastUpdated = DateTime.UtcNow, deleted = false ,id = id
+                var merchant = new Merchant { lastName = EntryName.Text, firstName = EntryFirstName.Text, picturePath = portraitFileLocation, creationDate = DateTime.Now, lastUpdated = DateTime.Now, deleted = false ,id = id
             };
             
                 await _connection.InsertAsync(merchant);

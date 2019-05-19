@@ -46,17 +46,16 @@ namespace Gatherman.DataAccess
             var merchantService = new MerchantService();
             //var merchantList = new List<Merchant>();
             
-
+            //On regarde si on doit lancer une initialisation ou une mise à jour des données
             if (!Application.Current.Properties.ContainsKey(Constants.KEY_LASTSYNC) || Application.Current.Properties[Constants.KEY_LASTSYNC] == null)
             {
                 await merchantService.initializeMerchantList(loggedUser);
-
             }
             else
             {
                 await merchantService.syncMerchant(loggedUser);
-
             }
+            //On charge les données de la base locale
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
             var MerchantList = new List<Merchant>();
             MerchantList.AddRange(await _connection.QueryAsync<Merchant>("SELECT * FROM Merchant WHERE deleted=?", false));
@@ -65,40 +64,31 @@ namespace Gatherman.DataAccess
             lstVMerchant.ItemsSource = null;
             lstVMerchant.ItemsSource = _Merchants;
 
-
-
-            //On crée la table Merchant avec un objet Merchant
-            //On crée une liste qui va récupérer les informations de la base de données (attente de la connexion)
-            //var MerchantList = await _connection.Table<Merchant>().Where(x => x.deleted == false).ToListAsync();
-            //var MerchantList = new List<Merchant>();
-            //MerchantList.AddRange(await _connection.QueryAsync<Merchant>("SELECT * FROM Merchant WHERE deleted=?", false));
-
-            //            var merchantService = new MerchantService();
-            //            await merchantService.syncMerchant();
-
-
-
-
-
             //test de sélection d'un item
             lstVMerchant.ItemSelected += (sender, e) =>
             {
                 if (lstVMerchant.SelectedItem != null)
                 {
-                    //Merchant item = lstVMerchant.SelectedItem as Merchant;
+                    Merchant item = lstVMerchant.SelectedItem as Merchant;
                     //DisplayAlert(item.FullName, "Vous avez cliqué sur un marchand", "OK");
                     //                lstVMerchant.SelectedItem = null;
+                    Debug.Write("\n\nVous averz cliqué sur " + item.FullName);
                 }
                 
             };
 
-            lstVMerchant.RefreshCommand = new Command((obj) =>
+            lstVMerchant.RefreshCommand = new Command(async () => await RefreshList());
+             
+            async Task RefreshList()
             {
                 Debug.Write("RefreshCommand");
-                merchantService.syncMerchant(loggedUser);
+                await merchantService.syncMerchant(loggedUser);
+                _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
+                MerchantList.AddRange(await _connection.QueryAsync<Merchant>("SELECT * FROM Merchant WHERE deleted=?", false));
+                lstVMerchant.ItemsSource = null;
                 lstVMerchant.ItemsSource = _Merchants;
                 lstVMerchant.IsRefreshing = false;
-            });
+            }
 
         }
 
@@ -111,7 +101,7 @@ namespace Gatherman.DataAccess
             var b = ((Button)sender);
             var merchantToDelete = b.CommandParameter as Merchant;
             merchantToDelete.deleted = true;
-            merchantToDelete.lastUpdated = DateTime.UtcNow;
+            merchantToDelete.lastUpdated = DateTime.Now;
             await _connection.UpdateAsync(merchantToDelete);
             // Retirer l'objet de la liste view
             _Merchants.Remove(merchantToDelete);
