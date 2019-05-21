@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+
+  <!--When you introduce a new theme in Core project's ThemeResources folder. Also create similar copy for android specific styling as below for that theme-->
+
+  <style name="redAppTheme" parent="MainBaseTheme">
+    <item name="toolbarStyle">@style/redThemeToolbarStyle</item>
+    <item name="toolbarPopupStyle">@style/lightToolbarPopupTheme</item>
+    <item name="colorPrimaryDark">#7f0000</item>
+    <item name="android:windowLightStatusBar">true</item>
+  </style>
+
+</resources>

@@ -32,6 +32,8 @@ namespace Gatherman
             }
             loggedUser = new Models.User();
             InitializeComponent();
+            // Chargement du thème des couleurs
+            ThemeManager.LoadTheme();
             //Si on est déjà connecté
             MainPage = new Views.LoginPage(loggedUser);
 

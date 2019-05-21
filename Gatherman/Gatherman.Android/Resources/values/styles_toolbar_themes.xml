@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+
+  <!--When you introduce a new theme in Core project's ThemeResources folder. Also create similar copy for Toolbar as below for that theme-->
+
+  <style name="blueThemeToolbarStyle" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    <item name="android:textColorPrimary">#ffffff</item>
+    <item name="actionMenuTextColor">#ffffff</item>
+    <item name="android:textColorSecondary">#000000</item>
+  </style>
+
+  <style name="ToolbarTitleStyle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+    <item name="android:textSize">20sp</item>
+  </style>
+</resources>

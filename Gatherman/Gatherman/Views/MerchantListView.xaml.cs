@@ -33,15 +33,15 @@ namespace Gatherman.DataAccess
             loggedUser = _user;
             // Je crée ma connection avec la base de données
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
-           
 
-		}
+        }
 
         //Au chargement de la page
         protected override async void OnAppearing()
         {
             InitializeComponent();
-            
+            await _connection.CreateTableAsync<Merchant>();
+
             //Si c'est le premier lancement, il faut faire une requête get sur l'api
             var merchantService = new MerchantService();
             //var merchantList = new List<Merchant>();
@@ -49,11 +49,13 @@ namespace Gatherman.DataAccess
             //On regarde si on doit lancer une initialisation ou une mise à jour des données
             if (!Application.Current.Properties.ContainsKey(Constants.KEY_LASTSYNC) || Application.Current.Properties[Constants.KEY_LASTSYNC] == null)
             {
-                await merchantService.initializeMerchantList(loggedUser);
+                if (!Constants.isOffline)
+                    await merchantService.initializeMerchantList(loggedUser);
             }
             else
             {
-                await merchantService.syncMerchant(loggedUser);
+                if (!Constants.isOffline)
+                    await merchantService.syncMerchant(loggedUser);
             }
             //On charge les données de la base locale
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
@@ -82,10 +84,12 @@ namespace Gatherman.DataAccess
             async Task RefreshList()
             {
                 Debug.Write("RefreshCommand");
-                await merchantService.syncMerchant(loggedUser);
+                if (!Constants.isOffline)
+                    await merchantService.syncMerchant(loggedUser);
                 _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
                 MerchantList.AddRange(await _connection.QueryAsync<Merchant>("SELECT * FROM Merchant WHERE deleted=?", false));
                 lstVMerchant.ItemsSource = null;
+                _Merchants = new ObservableCollection<Merchant>(MerchantList);
                 lstVMerchant.ItemsSource = _Merchants;
                 lstVMerchant.IsRefreshing = false;
             }

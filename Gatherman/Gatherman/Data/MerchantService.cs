@@ -51,7 +51,6 @@ namespace Gatherman.Data
             //Connection et ajout à la BDD locale
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
             Debug.Write("------à insérer-------\n" + JsonConvert.SerializeObject(merchantList));
-            await _connection.CreateTableAsync<Merchant>();
             int rows = await _connection.InsertAllAsync(merchantList);
             Debug.Write("------"+rows+" lignes insérées-------\n" + JsonConvert.SerializeObject(merchantList));
             //On crée la donnée lastSync
