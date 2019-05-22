@@ -65,7 +65,6 @@ namespace Gatherman.Data
         {
             loggedUser = _user;
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
-            await _connection.CreateTableAsync<Merchant>();
 
             //On récupère la date de la dernière synchronisation
             if (Application.Current.Properties.ContainsKey(Constants.KEY_LASTSYNC))

@@ -69,6 +69,7 @@ namespace Gatherman.Models
 
         public async Task<int> isAuthenticated()
         {
+            return 200;
             HttpResponseMessage response = null;
             LoginAPIPostObject body = new LoginAPIPostObject { username = this.username, password = this.password };
             try

@@ -13,5 +13,6 @@ namespace Gatherman
         public const string KEY_LASTSYNC = "lastSync";
         public const string KEY_CONNECTED = "connected";
         public const string KEY_CREDENTIALS = "credentials";
+        public const bool isOffline = true;
     }
 }
