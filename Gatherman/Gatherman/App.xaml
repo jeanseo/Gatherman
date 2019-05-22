@@ -6,13 +6,12 @@
              >
     <Application.Resources>
         <ResourceDictionary MergedWith="themes:LightTheme">
-            <Style x:Key="PrimaryButtonStyle" TargetType="Button">
-                <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}"/>
-                <Setter Property="TextColor" Value="{DynamicResource PrimaryTintColor}"/>
-                <Setter Property="HeightRequest" Value="40"/>
-                <Setter Property="WidthRequest" Value="200"/>
-                <Setter Property="CornerRadius" Value="20"/>
+
+            <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryTintColor}"/>
+                <Setter Property="TextColor" Value="{DynamicResource SecondaryTextColor}"/>
             </Style>
+            
 
             <Style x:Key="TitleLabelStyle" TargetType="Label">
                 <Setter Property="FontSize" Value="20"/>
@@ -27,6 +26,11 @@
             <Style x:Key="MediumLabelStyle" TargetType="Label">
                 <Setter Property="FontSize" Value="25"/>
                 <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}"/>
+            </Style>
+
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{DynamicResource NavigationBarColor}"/>
+                <Setter Property="BarTextColor" Value="{DynamicResource SecondaryTextColor}"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

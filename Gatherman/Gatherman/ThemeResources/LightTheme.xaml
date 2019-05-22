@@ -3,19 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Gatherman.ThemeResources.LightTheme">
     <!--Green-->
-    <Color x:Key="PrimaryColor">#2acd09</Color>
+    <Color x:Key="PrimaryColor">#BF360C</Color>
     <!--Dark Green-->
-    <Color x:Key="PrimaryDarkColor">#22a009</Color>
+    <Color x:Key="PrimaryDarkColor">#870000</Color>
     <!--White-->
-    <Color x:Key="PrimaryTintColor">#FFFFFF</Color>
+    <Color x:Key="PrimaryTintColor">#F9683A</Color>
     <!--White-->
     <Color x:Key="PageBackgroundColor">#FFFFFF</Color>
     <!--Green-->
-    <Color x:Key="NavigationBarColor">#2acd09</Color>
+    <Color x:Key="NavigationBarColor">#870000</Color>
     <!--Dark Grey-->
     <Color x:Key="PrimaryTextColor">#3f3f3f</Color>
     <!--Mid Grey-->
-    <Color x:Key="SecondaryTextColor">#6e6e6e</Color>
+    <Color x:Key="SecondaryTextColor">#FFFFFF</Color>
     <!--Mid-Light Grey-->
     <Color x:Key="SubTextColor">#969696</Color>
     <!--White-->
