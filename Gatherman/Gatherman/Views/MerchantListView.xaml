@@ -4,17 +4,19 @@
              x:Class="Gatherman.DataAccess.DBAccess"
              xmlns:ui="clr-namespace:Vapolia.Lib.Ui;assembly=XamarinFormsGesture"
              Visual="Material"
+             Title="Commerçants"
              >
-        <NavigationPage.TitleView>
-            <StackLayout Orientation="Horizontal">
-            <Label Text="menu"/>
-            <Label Text="Commerçant"
+    
+    <NavigationPage.TitleView>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Commerçants"
                    HorizontalOptions="StartAndExpand"
                    VerticalOptions="CenterAndExpand"
+                   TextColor="{DynamicResource SecondaryTextColor}"
                />
             <Button Text="Add" Clicked="OnAdd"/>
         </StackLayout>
-        </NavigationPage.TitleView>
+    </NavigationPage.TitleView>
     <ContentPage.Content>
         <StackLayout>
             <StackLayout Orientation="Horizontal">
