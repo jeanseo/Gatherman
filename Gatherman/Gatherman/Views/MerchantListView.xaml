@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Gatherman.DataAccess.DBAccess"
              xmlns:ui="clr-namespace:Vapolia.Lib.Ui;assembly=XamarinFormsGesture"
+             Visual="Material"
              >
         <NavigationPage.TitleView>
             <StackLayout Orientation="Horizontal">
