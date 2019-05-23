@@ -32,6 +32,13 @@
                 <Setter Property="BarBackgroundColor" Value="{DynamicResource NavigationBarColor}"/>
                 <Setter Property="BarTextColor" Value="{DynamicResource SecondaryTextColor}"/>
             </Style>
+
+            <OnPlatform x:Key="MaterialIconsFont" x:TypeArguments="x:String" Android="materialicons-regular.ttf#Material Icons" iOS="MaterialIcons-Regular">
+            </OnPlatform>
+
+            <x:String x:Key="PersonAdd">\ue7fe</x:String>
+
         </ResourceDictionary>
+        
     </Application.Resources>
 </Application>

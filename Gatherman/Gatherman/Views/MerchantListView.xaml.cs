@@ -20,6 +20,7 @@ namespace Gatherman.DataAccess
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class DBAccess : ContentPage
 	{
+        public string icon { get; } = Constants.PersonAdd;
         //Si on est pas déjà connecté, on fait apparaitre la page de connexion
         public Models.User loggedUser;
 
@@ -41,6 +42,7 @@ namespace Gatherman.DataAccess
         protected override async void OnAppearing()
         {
             InitializeComponent();
+            BindingContext = this;
             await _connection.CreateTableAsync<Merchant>();
 
 

@@ -80,5 +80,6 @@ namespace Gatherman
         {
             // Handle when your app resumes
         }
+        
     }
 }
