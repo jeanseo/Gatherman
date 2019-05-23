@@ -18,9 +18,15 @@
         </StackLayout>
     </NavigationPage.TitleView>
     <ContentPage.Content>
+        <AbsoluteLayout HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand">
+            <Button Text="+" WidthRequest="56" HeightRequest="56" BorderRadius="28"  HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand"
+                    AbsoluteLayout.LayoutBounds="1,1, 100, 100"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                    Margin="16"
+                    
+                    BackgroundColor="{DynamicResource PrimaryColor}"
+                    />
         <StackLayout>
-            <StackLayout Orientation="Horizontal">
-            </StackLayout>
             <ListView x:Name="lstVMerchant"
                       IsPullToRefreshEnabled="True"
                       ui:Gesture.SwipeLeftCommand="{Binding SwipeLeftCommand}"
@@ -31,8 +37,8 @@
                         <ViewCell>
 
                             <StackLayout Orientation="Horizontal">
-                            <Label Text ="{Binding FullName}" />
-                            <Button Text="Edit" 
+                                <Label Text ="{Binding FullName}" />
+                                <Button Text="Edit" 
                                     CommandParameter="{Binding .}"
                                     Clicked="OnEdit"
                                     />
@@ -45,9 +51,9 @@
 
                     </DataTemplate>
                 </ListView.ItemTemplate>
-                
             </ListView>
-
         </StackLayout>
+        </AbsoluteLayout>
+
     </ContentPage.Content>
 </ContentPage>
