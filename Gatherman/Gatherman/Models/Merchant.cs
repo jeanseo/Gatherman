@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using Xamarin.Forms;
 
 namespace Gatherman.DataAccess.Model
 {
@@ -57,23 +58,56 @@ namespace Gatherman.DataAccess.Model
         {
             get { return string.Format("{0} {1}", firstName, lastName); }
         }
-        private string _portrait;
+        private string _pictureFileName;
 
-        public string picturePath
+        public string pictureFileName
         {
-            get { return _portrait; }
+            get { return _pictureFileName; }
 
             set
             {
-                if (_portrait == value)
+                if (_pictureFileName == value)
                 {
                     //aucune modification
                     return;
                 }
                 //Il y a eu modification
-                _portrait = value;
+                _pictureFileName = value;
 
                 OnPropertyChanged();
+            }
+        }
+
+        private string _pictureLocalPath;
+        public string pictureLocalPath
+        {
+            get { return _pictureLocalPath; }
+
+            set
+            {
+                if (_pictureLocalPath == value)
+                {
+                    //aucune modification
+                    return;
+                }
+                //Il y a eu modification
+                _pictureLocalPath = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+        public ImageSource pictureFullPath
+        {
+            get
+            {
+                if (this.pictureFileName == null)
+                {
+                    return ImageSource.FromResource("Gatherman.images.default_portrait.png");
+                }
+                    
+                else
+                    return ImageSource.FromFile(this.pictureLocalPath + "/" + this.pictureFileName);
             }
         }
 

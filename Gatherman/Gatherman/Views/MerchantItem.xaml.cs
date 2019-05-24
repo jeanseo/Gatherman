@@ -24,19 +24,21 @@ namespace Gatherman.Views
 
         private bool EditForm;
         public Merchant merchant;
-        private string portraitFileLocation;
+        private string pictureFilePath;
+        private string pictureFileName;
 
 
         //Déclaration de la liaison avec la base de données
         private SQLiteAsyncConnection _connection;
         public MerchantForm ()
 		{
-
             InitializeComponent();
             // Je crée ma connection avec la base de données
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
             this.EditForm = false;
-            Portrait.Source = ImageSource.FromResource("Gatherman.images.default_portrait.png");
+            Picture.Source = ImageSource.FromResource("Gatherman.images.default_portrait.png");
+
+
 
         }
 
@@ -50,17 +52,16 @@ namespace Gatherman.Views
             this.EditForm = true;
             EntryName.Text = this.merchant.lastName;
             EntryFirstName.Text = this.merchant.firstName;
-            if (this.merchant.picturePath == null)
-            {
-                Portrait.Source = ImageSource.FromResource("Gatherman.images.default_portrait.png");
-            }
+            //TODO A refactoriser
+            /*
+            if (this.merchant.pictureFullPath == null)
+                Picture.Source = ImageSource.FromResource("Gatherman.images.default_portrait.png");
             else
-            {
-                Portrait.Source = new ImageSourceConverter().ConvertFromInvariantString(this.merchant.picturePath) as ImageSource;
-                picturePath.Text = this.merchant.picturePath;
-            }
+                Picture.Source = new ImageSourceConverter().ConvertFromInvariantString(this.merchant.pictureFullPath) as ImageSource;
+        */
+            Picture.Source = this.merchant.pictureFullPath;
 
-        }
+            }
 
         private async void OnValidate(object sender, EventArgs e)
         {
@@ -70,27 +71,27 @@ namespace Gatherman.Views
                 this.merchant.firstName = EntryFirstName.Text;
                 this.merchant.lastUpdated = DateTime.Now;
 
-                if (this.merchant.picturePath != null && portraitFileLocation != null)
+                if (this.merchant.pictureFileName != null && pictureFileName != null)
                 {
                     //TODO si on change la photo, il faut supprimer l'ancien fichier image
-                    this.merchant.picturePath = portraitFileLocation;
+                }
+                if (pictureFileName != null)
+                {
+                    this.merchant.pictureFileName = pictureFileName;
+                    this.merchant.pictureLocalPath = pictureFilePath;
+
                 }
                 await _connection.UpdateAsync(this.merchant);
-                //var merchantService = new MerchantService();
-                //await merchantService.syncMerchant();
-
 
             }
             else
             {
                 Guid id = Guid.NewGuid();
                 Debug.Write(id);
-                var merchant = new Merchant { lastName = EntryName.Text, firstName = EntryFirstName.Text, picturePath = portraitFileLocation, creationDate = DateTime.Now, lastUpdated = DateTime.Now, deleted = false ,id = id
+                var merchant = new Merchant { lastName = EntryName.Text, firstName = EntryFirstName.Text, pictureFileName = pictureFileName, pictureLocalPath = pictureFilePath, creationDate = DateTime.Now, lastUpdated = DateTime.Now, deleted = false ,id = id
             };
             
                 await _connection.InsertAsync(merchant);
-                //var merchantService = new MerchantService();
-                //await merchantService.syncMerchant();
 
             }
             
@@ -104,21 +105,24 @@ namespace Gatherman.Views
 
         private async void OnCamera(object sender, EventArgs e)
         {
+
+            //TODO Verifier les autorisations
             if (CrossMedia.Current.IsCameraAvailable && CrossMedia.Current.IsTakePhotoSupported)
             {
                 // Supply media options for saving our photo after it's taken.
                 var mediaOptions = new Plugin.Media.Abstractions.StoreCameraMediaOptions
                 {
                     Directory = "Receipts",
-                    Name = $"{DateTime.UtcNow}.jpg",
+                    Name = $"{Guid.NewGuid()}.jpg",
                     PhotoSize = PhotoSize.Medium,
                     CompressionQuality = 80
                 };
 
                 // Take a photo of the business receipt.
                 var file = await CrossMedia.Current.TakePhotoAsync(mediaOptions);
-                Portrait.Source = file.Path;
-                portraitFileLocation = Path.GetDirectoryName(file.Path) + "/" + Path.GetFileName(file.Path);
+                Picture.Source = file.Path;
+                pictureFilePath = Path.GetDirectoryName(file.Path);
+                pictureFileName = Path.GetFileName(file.Path);
             }
         }
 
@@ -130,9 +134,10 @@ namespace Gatherman.Views
                     CompressionQuality = 80
                 };
                 var file = await CrossMedia.Current.PickPhotoAsync(mediaOptions).ConfigureAwait(true);
-                Portrait.Source = file.Path;
-                portraitFileLocation = Path.GetDirectoryName(file.Path) + "/" + Path.GetFileName(file.Path);
+                Picture.Source = file.Path;
+                pictureFilePath = Path.GetDirectoryName(file.Path);
+                pictureFileName = Path.GetFileName(file.Path);
 
-    }
+        }
     }
 }

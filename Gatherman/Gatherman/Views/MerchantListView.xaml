@@ -10,8 +10,7 @@
     <ContentPage.Content>
         <AbsoluteLayout HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand">
                 <Button Text="{Binding icon}"
-                    FontFamily="{OnPlatform  iOS='materialicons-regular',
-                                            Android='materialicons-regular.ttf#Material Icons'}"
+                    FontFamily="{DynamicResource MaterialIconsFont}"
                     FontSize="Large"
                     WidthRequest="56" HeightRequest="56" BorderRadius="28"  HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand"
                     AbsoluteLayout.LayoutBounds="1,1, 100, 100"
@@ -32,6 +31,9 @@
                         <ViewCell>
 
                             <StackLayout Orientation="Horizontal">
+                                <Image Source="{Binding pictureFullPath}"
+                                    WidthRequest="56" HeightRequest="56"
+                                />
                                 <Label Text ="{Binding FullName}" />
                                 <Button Text="Edit" 
                                     CommandParameter="{Binding .}"

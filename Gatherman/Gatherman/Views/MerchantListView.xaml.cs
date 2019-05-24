@@ -11,7 +11,6 @@ using Xamarin.Forms.Xaml;
 using SQLite;
 using System.Collections.ObjectModel;
 using Gatherman.Views;
-using Plugin.Media;
 using System.Diagnostics;
 using Newtonsoft.Json;
 
