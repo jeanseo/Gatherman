@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using FFImageLoading.Forms.Platform;
 using Foundation;
 using UIKit;
 using Vapolia.Ios.Lib.Effects;
@@ -26,6 +26,7 @@ namespace Gatherman.iOS
             PlatformGestureEffect.Init();
             global::Xamarin.Forms.Forms.Init();
             global::Xamarin.Forms.FormsMaterial.Init();
+            CachedImageRenderer.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

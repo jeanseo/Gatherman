@@ -52,13 +52,6 @@ namespace Gatherman.Views
             this.EditForm = true;
             EntryName.Text = this.merchant.lastName;
             EntryFirstName.Text = this.merchant.firstName;
-            //TODO A refactoriser
-            /*
-            if (this.merchant.pictureFullPath == null)
-                Picture.Source = ImageSource.FromResource("Gatherman.images.default_portrait.png");
-            else
-                Picture.Source = new ImageSourceConverter().ConvertFromInvariantString(this.merchant.pictureFullPath) as ImageSource;
-        */
             Picture.Source = this.merchant.pictureFullPath;
 
             }

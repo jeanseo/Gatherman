@@ -19,7 +19,8 @@ namespace Gatherman.DataAccess
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class DBAccess : ContentPage
 	{
-        public string icon { get; } = Constants.PersonAdd;
+        public string personAddIcon { get; } = Constants.PersonAdd;
+        public string editIcon { get; } = Constantes.IconFont.edit;
         //Si on est pas déjà connecté, on fait apparaitre la page de connexion
         public Models.User loggedUser;
 
@@ -75,8 +76,7 @@ namespace Gatherman.DataAccess
                 if (lstVMerchant.SelectedItem != null)
                 {
                     Merchant item = lstVMerchant.SelectedItem as Merchant;
-                    //DisplayAlert(item.FullName, "Vous avez cliqué sur un marchand", "OK");
-                    //                lstVMerchant.SelectedItem = null;
+                    Navigation.PushAsync(new MerchantForm(item));
                     Debug.Write("\n\nVous averz cliqué sur " + item.FullName);
                 }
                 
@@ -104,7 +104,7 @@ namespace Gatherman.DataAccess
         }
         private async void OnDelete(object sender, EventArgs e)
         {
-            var b = ((Button)sender);
+            var b = ((ImageButton)sender);
             var merchantToDelete = b.CommandParameter as Merchant;
             merchantToDelete.deleted = true;
             merchantToDelete.lastUpdated = DateTime.Now;
@@ -114,7 +114,7 @@ namespace Gatherman.DataAccess
         }
         private async void OnEdit(object sender, EventArgs e)
         {
-            var b = ((Button)sender);
+            var b = ((ImageButton)sender);
             var merchantToEdit = b.CommandParameter as Merchant;
             await Navigation.PushAsync(new MerchantForm(merchantToEdit));
         }
