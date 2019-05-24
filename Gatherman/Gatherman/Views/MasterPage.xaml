@@ -1,12 +1,111 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"  
+             xmlns:ffSvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"  
+             xmlns:ffTransformations="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"  
+             
              x:Class="Gatherman.Views.MasterPage"
              Visual="Material"
              >
   <ContentPage.Content>
-      <StackLayout>
-          <Label Text="Menu!!!" />
-      </StackLayout>
-  </ContentPage.Content>
+        <Grid
+            RowSpacing="0"
+            ColumnSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="90"/>
+            </Grid.ColumnDefinitions>
+            <StackLayout
+                 Grid.Row="0"
+                 Grid.Column="0"
+                Padding="8"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                BackgroundColor="{DynamicResource PrimaryColor}">
+                <Label Text="Charlie Brown"
+                       TextColor="{DynamicResource SecondaryTextColor}"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       />
+                <Label Text="Agent de collecte" 
+                       TextColor="{DynamicResource SecondaryTextColor}"
+                       FontSize="12"/>
+                <Label Text="charlie.brown@peanuts.com" 
+                       TextColor="{DynamicResource SecondaryTextColor}"
+                       FontSize="14"/>
+                <Label Text="+12125550908" 
+                       TextColor="{DynamicResource SecondaryTextColor}"
+                       FontSize="14"/>
+            </StackLayout>
+            <StackLayout
+                Grid.Row="0"
+                 Grid.Column="1"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                BackgroundColor="{DynamicResource PrimaryColor}"
+               
+                >
+                <ff:CachedImage 
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        VerticalOptions="CenterAndExpand"
+                                        WidthRequest="80"
+                                        Source="https://www.babelio.com/users/QUIZ_Charlie-Brown-et-les-Peanuts_1325.jpeg">
+                    <ff:CachedImage.Transformations>
+                        <ffTransformations:CircleTransformation />
+                    </ff:CachedImage.Transformations>
+                </ff:CachedImage>
+
+            </StackLayout>
+            <StackLayout
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                BackgroundColor="{DynamicResource PageBackgroundColor}"
+                Padding="8"
+                >
+                <StackLayout Orientation="Horizontal">
+                    <Image
+                                        BackgroundColor="Transparent"
+                                        >
+                        <Image.Source>
+                            <FontImageSource Glyph="&#xe429;"
+                                            FontFamily="{DynamicResource MaterialIconsFont}"
+                                            Size="24"
+                                            Color="{DynamicResource PrimaryTextColor}"/>
+                        </Image.Source>
+                    </Image>
+                    <Label Text="Paramètres" VerticalTextAlignment="Center"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Padding="16,0">
+                    <Label Text="Mode hors ligne" VerticalTextAlignment="Center"/>
+                    <Switch Visual="Material"/>
+                </StackLayout>
+                <BoxView WidthRequest="1"/>
+                <StackLayout Orientation="Horizontal">
+                    <Image
+                                        BackgroundColor="Transparent"
+                                        >
+                        <Image.Source>
+                            <FontImageSource Glyph="&#xe879;"
+                                            FontFamily="{DynamicResource MaterialIconsFont}"
+                                            Size="24"
+                                            Color="{DynamicResource PrimaryTextColor}"/>
+                        </Image.Source>
+                    </Image>
+                    <Label Text="Déconnexion" VerticalTextAlignment="Center"/>
+                </StackLayout>
+            </StackLayout>
+
+        </Grid>
+
+
+    </ContentPage.Content>
 </ContentPage>
