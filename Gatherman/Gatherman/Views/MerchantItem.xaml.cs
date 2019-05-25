@@ -98,7 +98,7 @@ namespace Gatherman.Views
 
         private async void OnCamera(object sender, EventArgs e)
         {
-
+            //TODO Gérer si on annule la prise de vue
             //TODO Verifier les autorisations
             if (CrossMedia.Current.IsCameraAvailable && CrossMedia.Current.IsTakePhotoSupported)
             {
@@ -113,24 +113,35 @@ namespace Gatherman.Views
 
                 // Take a photo of the business receipt.
                 var file = await CrossMedia.Current.TakePhotoAsync(mediaOptions);
-                Picture.Source = file.Path;
-                pictureFilePath = Path.GetDirectoryName(file.Path);
-                pictureFileName = Path.GetFileName(file.Path);
+                if (file != null)
+                {
+                    Picture.Source = file.Path;
+                    pictureFilePath = Path.GetDirectoryName(file.Path);
+                    pictureFileName = Path.GetFileName(file.Path);
+                }
             }
         }
 
         private async void OnPickPicture(object sender, EventArgs e)
             {
-                var mediaOptions = new Plugin.Media.Abstractions.PickMediaOptions
+            //TODO Gérer si on annule la prise de vue
+            var mediaOptions = new Plugin.Media.Abstractions.PickMediaOptions
                 {
                     PhotoSize = PhotoSize.Medium,
                     CompressionQuality = 80
                 };
                 var file = await CrossMedia.Current.PickPhotoAsync(mediaOptions).ConfigureAwait(true);
+            if (file != null)
+            {
                 Picture.Source = file.Path;
                 pictureFilePath = Path.GetDirectoryName(file.Path);
                 pictureFileName = Path.GetFileName(file.Path);
+            }
 
+        }
+        private async void onPhotoAdd(object sender, EventArgs e)
+        {
+            //popupListView.IsVisible = true;
         }
     }
 }

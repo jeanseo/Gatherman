@@ -4,6 +4,7 @@
              x:Class="Gatherman.Views.MerchantForm"
              Visual="Material"
             >
+
     <NavigationPage.TitleView>
         <StackLayout Orientation="Horizontal">
             <Label Text="Ajout d'un commerçant"
@@ -14,19 +15,64 @@
         </StackLayout>
     </NavigationPage.TitleView>
     <ContentPage.Content>
-        <StackLayout>
-            <Image x:Name="Picture"></Image>
-            <Label x:Name="PicturePath"/>
-            <Entry Placeholder="Nom"
-                   x:Name="EntryName"
-                   />
-            <Entry Placeholder="Prénom"
-                   x:Name="EntryFirstName"
-                   Text="{Binding merchant.Name}"
-                   />
-            <Button Text="Camera" Clicked="OnCamera"/>
-            <Button Text="Choisir image" Clicked="OnPickPicture"/>
+        <ScrollView>
+            <StackLayout>
+                <AbsoluteLayout>
+                    <Image x:Name="Picture" Aspect="AspectFill" HeightRequest="200" 
+                            AbsoluteLayout.LayoutBounds="0,0,1,200" 
+                            AbsoluteLayout.LayoutFlags="XProportional,YProportional, WidthProportional"
+                            />
+                    <Grid                             
+                    BackgroundColor="#66000000"
+                        AbsoluteLayout.LayoutBounds="0,1,1,40" 
+                        AbsoluteLayout.LayoutFlags="XProportional,YProportional, WidthProportional"
+                        Padding="8"
+                        >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
-        </StackLayout>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label 
+                            VerticalTextAlignment="Center"
+                            Grid.Column="0"
+                            Text="Ajouter une photo"
+                            FontSize="14"
+                            TextColor="White" VerticalOptions="End" HorizontalOptions="FillAndExpand"
+                            />
+                        <ImageButton
+                                        VerticalOptions="Center"
+                                        Grid.Column="1"
+                                        Clicked="onPhotoAdd"
+                                        BackgroundColor="Transparent"
+                                        >
+                            <ImageButton.Source>
+                                <FontImageSource Glyph="&#xe439;"
+                                            FontFamily="{DynamicResource MaterialIconsFont}"
+                                            Size="40"
+                                            Color="#80FFFFFF"/>
+                            </ImageButton.Source>
+                        </ImageButton>
+                    </Grid>
+
+                </AbsoluteLayout>
+
+
+                <Label x:Name="PicturePath"/>
+                <Entry Placeholder="Nom"
+                            x:Name="EntryName"
+                            />
+                <Entry Placeholder="Prénom"
+                            x:Name="EntryFirstName"
+                            Text="{Binding merchant.Name}"
+                            />
+                <Button Text="Camera" Clicked="OnCamera"/>
+                <Button Text="Choisir image" Clicked="OnPickPicture"/>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
+
 </ContentPage>

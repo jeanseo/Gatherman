@@ -118,6 +118,8 @@ namespace Gatherman.DataAccess
             var merchantToEdit = b.CommandParameter as Merchant;
             await Navigation.PushAsync(new MerchantForm(merchantToEdit));
         }
+
+
         public Command SwipeLeftCommand => new Command(() =>
         {
             //do something
