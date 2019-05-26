@@ -28,7 +28,17 @@ namespace Gatherman.Views
             public int Myvalue { get; set; }
         }
 
-
+        //TODO Binder cette valeur au titre de la page
+        private string pageTitle
+            {
+                get
+                {
+                if (this.EditForm == false)
+                    return "Ajout d'un commerçant";
+                else
+                    return "Edition d'un commerçant";
+                }
+            }
         private bool EditForm;
         public Merchant merchant;
         private string pictureFilePath;

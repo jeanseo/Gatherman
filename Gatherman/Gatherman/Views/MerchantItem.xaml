@@ -6,13 +6,38 @@
             >
 
     <NavigationPage.TitleView>
-        <StackLayout Orientation="Horizontal">
-            <Label Text="Ajout d'un commerçant"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+                <Label 
+                    Grid.Column="0"
+                    Text="Commerçant"
                    HorizontalOptions="StartAndExpand"
                    VerticalOptions="CenterAndExpand"
+                    Style="{DynamicResource TitleLabelStyle}"
                />
-            <Button Text="Valider" Clicked="OnValidate"/>
-        </StackLayout>
+                <ImageButton
+                    Grid.Column="1"
+                    VerticalOptions="Center"
+                    Clicked="OnValidate"
+                    BackgroundColor="Transparent"
+                    Padding="2,0,8,0"
+                    >
+                    <ImageButton.Source>
+                        <FontImageSource Glyph="&#xe5ca;"
+                                            FontFamily="{DynamicResource MaterialIconsFont}"
+                                            Size="40"
+                                            Color="{DynamicResource SecondaryTextColor}"/>
+                    </ImageButton.Source>
+                </ImageButton>
+        </Grid>
+        
     </NavigationPage.TitleView>
     <ContentPage.Content>
         <ScrollView>
@@ -28,6 +53,12 @@
                         AbsoluteLayout.LayoutFlags="XProportional,YProportional, WidthProportional"
                         Padding="8"
                         >
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer 
+                        Tapped="onPhotoAdd" 
+                        NumberOfTapsRequired="1"
+                        />
+                        </Grid.GestureRecognizers>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
@@ -60,15 +91,125 @@
 
                 </AbsoluteLayout>
 
+                <StackLayout Padding="8,0" HorizontalOptions="FillAndExpand">
+                    
+                    <Label x:Name="PicturePath"/>
+                    <StackLayout Orientation="Horizontal">
+                        <Image
+                    VerticalOptions="Center"
+                    BackgroundColor="Transparent"
+                    >
+                            <Image.Source>
+                                <FontImageSource Glyph="&#xe87c;"
+                                            FontFamily="{DynamicResource MaterialIconsFont}"
+                                            Size="40"
+                                            Color="{DynamicResource PrimaryTextColor}"/>
+                            </Image.Source>
+                        </Image>
+                        <Entry 
+                            HorizontalOptions="FillAndExpand"
+                            Placeholder="Prénom"
+                                x:Name="EntryFirstName"
+                               Keyboard="Plain"
+                            />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Image
+                    VerticalOptions="Center"
+                    BackgroundColor="Transparent"
+                    >
+                            <Image.Source>
+                                <FontImageSource Glyph="&#xe87c;"
+                                            FontFamily="{DynamicResource MaterialIconsFont}"
+                                            Size="40"
+                                            Color="{DynamicResource PrimaryTextColor}"/>
+                            </Image.Source>
+                        </Image>
+                        <Entry 
+                            HorizontalOptions="FillAndExpand"
+                            Placeholder="Nom"
+                                x:Name="EntryName"
+                               Keyboard="Plain"
+                            />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Image
+                    VerticalOptions="Center"
+                    BackgroundColor="Transparent"
+                    >
+                            <Image.Source>
+                                <FontImageSource Glyph="&#xe0be;"
+                                            FontFamily="{DynamicResource MaterialIconsFont}"
+                                            Size="40"
+                                            Color="{DynamicResource PrimaryTextColor}"/>
+                            </Image.Source>
+                        </Image>
+                        <Entry 
+                            HorizontalOptions="FillAndExpand"
+                            Placeholder="Email"
+                                x:Name="EntryEmail"
+                               Keyboard="Email"
+                            />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Image
+                    VerticalOptions="Center"
+                    BackgroundColor="Transparent"
+                    >
+                            <Image.Source>
+                                <FontImageSource Glyph="&#xe0cd;"
+                                            FontFamily="{DynamicResource MaterialIconsFont}"
+                                            Size="40"
+                                            Color="{DynamicResource PrimaryTextColor}"/>
+                            </Image.Source>
+                        </Image>
+                        <Entry 
+                            HorizontalOptions="FillAndExpand"
+                            Placeholder="Téléphone"
+                                x:Name="EntryPhone"
+                               Keyboard="Telephone"
+                            />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Image
+                    VerticalOptions="Center"
+                    BackgroundColor="Transparent"
+                    >
+                            <Image.Source>
+                                <FontImageSource Glyph="&#xe227;"
+                                            FontFamily="{DynamicResource MaterialIconsFont}"
+                                            Size="40"
+                                            Color="{DynamicResource PrimaryTextColor}"/>
+                            </Image.Source>
+                        </Image>
+                        <Entry 
+                            HorizontalOptions="FillAndExpand"
+                            Placeholder="Revenus / jour"
+                                x:Name="EntryIncoming"
+                               Keyboard="Numeric"
+                            />
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Image
+                    VerticalOptions="Center"
+                    BackgroundColor="Transparent"
+                    >
+                            <Image.Source>
+                                <FontImageSource Glyph="&#xe195;"
+                                            FontFamily="{DynamicResource MaterialIconsFont}"
+                                            Size="40"
+                                            Color="{DynamicResource PrimaryTextColor}"/>
+                            </Image.Source>
+                        </Image>
+                        <Entry 
+                            HorizontalOptions="FillAndExpand"
+                            Placeholder="Nombre de jours de congés / an"
+                                x:Name="EntryHolidays"
+                               Keyboard="Numeric"
+                            />
+                    </StackLayout>
 
-                <Label x:Name="PicturePath"/>
-                <Entry Placeholder="Nom"
-                            x:Name="EntryName"
-                            />
-                <Entry Placeholder="Prénom"
-                            x:Name="EntryFirstName"
-                            Text="{Binding merchant.Name}"
-                            />
+                </StackLayout>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
