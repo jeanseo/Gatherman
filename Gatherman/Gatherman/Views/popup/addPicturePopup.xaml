@@ -21,8 +21,8 @@
     <Frame BackgroundColor="{DynamicResource PageBackgroundColor}"  Margin="20,0" Padding="20,20" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
         <StackLayout>
             <Label Text="Ajouter une photo" Style="{DynamicResource BigLabelStyle}"/>
-            <Label Text="prendre une photo"/>
-            <Label Text="choisir une photo de l'album"/>
+            <Button Text="prendre une photo" Clicked="TakePicture"/>
+            <Button Text="choisir une photo de l'album" Clicked="PickPicture"/>
         </StackLayout>
     </Frame>
     </pages:PopupPage>  

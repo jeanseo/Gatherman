@@ -23,6 +23,11 @@ namespace Gatherman.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class MerchantForm : ContentPage
 	{
+        public class MyMessage
+        {
+            public int Myvalue { get; set; }
+        }
+
 
         private bool EditForm;
         public Merchant merchant;
@@ -39,9 +44,7 @@ namespace Gatherman.Views
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
             this.EditForm = false;
             Picture.Source = ImageSource.FromResource("Gatherman.images.default_portrait.png");
-
-
-
+            
         }
 
         public MerchantForm(Merchant _merchant)
@@ -55,8 +58,31 @@ namespace Gatherman.Views
             EntryName.Text = this.merchant.lastName;
             EntryFirstName.Text = this.merchant.firstName;
             Picture.Source = this.merchant.pictureFullPath;
+            
+        }
 
-            }
+        protected override void OnAppearing()
+        {
+            MessagingCenter.Subscribe<MyMessage>(this, "PopUpData", (value) =>
+            {
+                int choice = value.Myvalue;
+                Debug.Write("----CHOIX EFFECTUE-------\n" + choice);
+                switch (choice)
+                {
+                    case 1:
+                        OnCamera();
+                        break;
+                    case 2:
+                        OnPickPicture();
+                        break;
+                }
+            });
+        }
+
+        protected override void OnDisappearing()
+        {
+            MessagingCenter.Unsubscribe<MyMessage>(this, "PopUpData");
+        }
 
         private async void OnValidate(object sender, EventArgs e)
         {
@@ -98,14 +124,14 @@ namespace Gatherman.Views
 
         }*/
 
-        private async void OnCamera(object sender, EventArgs e)
+        private async void OnCamera()
         {
             //TODO Gérer si on annule la prise de vue
             //TODO Verifier les autorisations
             if (CrossMedia.Current.IsCameraAvailable && CrossMedia.Current.IsTakePhotoSupported)
             {
                 // Supply media options for saving our photo after it's taken.
-                var mediaOptions = new Plugin.Media.Abstractions.StoreCameraMediaOptions
+                var mediaOptions = new StoreCameraMediaOptions
                 {
                     Directory = "Receipts",
                     Name = $"{Guid.NewGuid()}.jpg",
@@ -124,11 +150,11 @@ namespace Gatherman.Views
             }
         }
 
-        private async void OnPickPicture(object sender, EventArgs e)
+        private async void OnPickPicture()
             {
             //TODO Gérer si on annule la prise de vue
-            var mediaOptions = new Plugin.Media.Abstractions.PickMediaOptions
-                {
+            var mediaOptions = new PickMediaOptions
+            {
                     PhotoSize = PhotoSize.Medium,
                     CompressionQuality = 80
                 };
@@ -143,7 +169,7 @@ namespace Gatherman.Views
         }
         private async void onPhotoAdd(object sender, EventArgs e)
         {
-
+            
             await PopupNavigation.PushAsync(new popup.addPicturePopup(),false);
         }
     }

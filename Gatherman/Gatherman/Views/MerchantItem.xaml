@@ -69,8 +69,6 @@
                             x:Name="EntryFirstName"
                             Text="{Binding merchant.Name}"
                             />
-                <Button Text="Camera" Clicked="OnCamera"/>
-                <Button Text="Choisir image" Clicked="OnPickPicture"/>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
