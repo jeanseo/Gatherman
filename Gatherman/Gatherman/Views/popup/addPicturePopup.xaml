@@ -20,9 +20,48 @@
     </pages:PopupPage.Animation>
     <Frame BackgroundColor="{DynamicResource PageBackgroundColor}"  Margin="20,0" Padding="20,20" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
         <StackLayout>
-            <Label Text="Ajouter une photo" Style="{DynamicResource BigLabelStyle}"/>
-            <Button Text="prendre une photo" Clicked="TakePicture"/>
-            <Button Text="choisir une photo de l'album" Clicked="PickPicture"/>
+            <Label Text="Ajouter une photo" Style="{DynamicResource MediumLabelStyle}" Margin="0,8"/>
+            <StackLayout Orientation="Horizontal" Padding="0,4">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer 
+                        Tapped="TakePicture" 
+                        NumberOfTapsRequired="1"
+                        />  
+                </StackLayout.GestureRecognizers>
+                <Image
+                    VerticalOptions="Center"
+                    BackgroundColor="Transparent"
+                    >
+                    <Image.Source>
+                        <FontImageSource Glyph="&#xe412;"
+                                            FontFamily="{DynamicResource MaterialIconsFont}"
+                                            Size="20"
+                                            Color="{DynamicResource PrimaryTextColor}"/>
+                    </Image.Source>
+                </Image>
+                <Label Text="prendre une photo" Style="{DynamicResource SmallLabelStyle}" VerticalOptions="Center"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" Padding="0,4">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer 
+                        Tapped="PickPicture" 
+                        NumberOfTapsRequired="1"
+                        />
+                </StackLayout.GestureRecognizers>
+                <Image
+                    VerticalOptions="Center"
+                    BackgroundColor="Transparent"
+                    >
+                <Image.Source>
+                    <FontImageSource Glyph="&#xe413;"
+                                            FontFamily="{DynamicResource MaterialIconsFont}"
+                                            Size="20"
+                                            Color="{DynamicResource PrimaryTextColor}"/>
+                </Image.Source>
+                </Image>
+
+                <Label Text="choisir une photo de l'album" Style="{DynamicResource SmallLabelStyle}" VerticalOptions="Center"/>
+            </StackLayout>
         </StackLayout>
     </Frame>
     </pages:PopupPage>  

@@ -8,6 +8,7 @@ using Android.Widget;
 using Android.OS;
 using Vapolia.Droid.Lib.Effects;
 using FFImageLoading.Forms.Platform;
+using Rg.Plugins.Popup.Services;
 
 namespace Gatherman.Droid
 {
@@ -26,6 +27,19 @@ namespace Gatherman.Droid
             global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
             CachedImageRenderer.Init(enableFastRenderer: true);
             LoadApplication(new App());
+        }
+        //Gestion du bouton précédent lorsqu'une popup est ouverte
+        public override void OnBackPressed()
+        {
+            if (Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed))
+            {
+                // Do something if there are some pages in the `PopupStack`
+                PopupNavigation.PopAsync(true);
+            }
+            else
+            {
+                // Do something if there are not any pages in the `PopupStack`
+            }
         }
     }
 }

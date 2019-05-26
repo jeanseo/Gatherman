@@ -34,5 +34,6 @@ namespace Gatherman.Views.popup
             MessagingCenter.Send(new MyMessage() { Myvalue = 2 }, "PopUpData");
             await PopupNavigation.PopAsync(false);
         }
+        
     }
 }

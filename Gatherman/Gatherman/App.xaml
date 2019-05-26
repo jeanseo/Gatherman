@@ -28,6 +28,11 @@
                 <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}"/>
             </Style>
 
+            <Style x:Key="SmallLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}"/>
+            </Style>
+
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{DynamicResource NavigationBarColor}"/>
                 <Setter Property="BarTextColor" Value="{DynamicResource SecondaryTextColor}"/>
