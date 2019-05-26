@@ -24,6 +24,7 @@ namespace Gatherman.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             PlatformGestureEffect.Init();
+            Rg.Plugins.Popup.Popup.Init();
             global::Xamarin.Forms.Forms.Init();
             global::Xamarin.Forms.FormsMaterial.Init();
             CachedImageRenderer.Init();

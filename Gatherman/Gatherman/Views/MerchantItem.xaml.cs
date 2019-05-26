@@ -16,6 +16,8 @@ using System.Net;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using Rg.Plugins.Popup.Services;
+
 namespace Gatherman.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -141,7 +143,8 @@ namespace Gatherman.Views
         }
         private async void onPhotoAdd(object sender, EventArgs e)
         {
-            //popupListView.IsVisible = true;
+
+            await PopupNavigation.PushAsync(new popup.addPicturePopup(),false);
         }
     }
 }
