@@ -195,7 +195,7 @@
                     BackgroundColor="Transparent"
                     >
                             <Image.Source>
-                                <FontImageSource Glyph="&#xe195;"
+                                <FontImageSource Glyph="&#xeb3e;"
                                             FontFamily="{DynamicResource MaterialIconsFont}"
                                             Size="40"
                                             Color="{DynamicResource PrimaryTextColor}"/>

@@ -19,5 +19,6 @@ namespace Gatherman.Constantes
         public const string work = "\ue8f9";
         public const string airplanemode_active = "\ue195";
         public const string attach_money = "\ue227";
+        public const string beach_access = "\ueb3e";
     }
 }

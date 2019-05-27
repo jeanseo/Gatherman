@@ -86,7 +86,7 @@
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Padding="16,0">
                     <Label Text="Mode hors ligne" VerticalTextAlignment="Center"/>
-                    <Switch Visual="Material"/>
+                    <Switch Visual="Material" x:Name="offlineSwitch"  Toggled="Switch_Toggled"/>
                 </StackLayout>
                 <BoxView WidthRequest="1"/>
                 <StackLayout Orientation="Horizontal">
