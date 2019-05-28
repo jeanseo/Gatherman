@@ -15,11 +15,11 @@ namespace Gatherman.Views
 	{
         public Models.User loggedUser;
 
-        public MasterPage ()
-		{
-			InitializeComponent ();
-
-		}
+        public MasterPage(Models.User _loggedUser)
+        {
+            InitializeComponent();
+            loggedUser = _loggedUser;
+        }
 
         protected override async void OnAppearing()
         {
@@ -32,6 +32,13 @@ namespace Gatherman.Views
         {
             Constantes.offline.isOffline = (bool)e.Value;
             Debug.Write("----VALEUR DE ISOFFLINE----\n" + Constantes.offline.isOffline);
+        }
+
+        private async void onLogOff(object sender, EventArgs e)
+        {
+            await loggedUser.logOff();
+
+            Application.Current.MainPage = new LoginPage(loggedUser);
         }
     }
 }

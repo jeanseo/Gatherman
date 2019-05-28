@@ -113,6 +113,39 @@ namespace Gatherman.Models
 
         }
 
+        public async Task<int> logOff()
+        {
+            this.username = null;
+            this.password = null;
+            //on supprime les infos de connection
+            Application.Current.Properties[Constants.KEY_CONNECTED] = false;
+            Application.Current.Properties[Constants.KEY_CREDENTIALS] = null;
+            await Application.Current.SavePropertiesAsync();
+            return 204;
+            /*
+            HttpResponseMessage response = null;
+            LoginAPIPostObject body = new LoginAPIPostObject { username = this.username, password = this.password };
+            try
+            {
+
+
+                using (var client = new HttpClient())
+                {
+                    string content = "";
+                    response = await client.PostAsync(Constants.PostLogoutURL, new StringContent(content, Encoding.UTF8, "application/json"));
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Write("--------ERREUR---------\n" + ex);
+
+            }
+            
+            return 0;
+            */
+        }
+
+
     }
 
 }

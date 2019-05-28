@@ -15,7 +15,7 @@ namespace Gatherman
         public static MasterDetailPage mainPage(Models.User loggedUser) {
                 return new MasterDetailPage()
                 {
-                    Master = new Gatherman.Views.MasterPage() { Title = "Main Page" },
+                    Master = new Gatherman.Views.MasterPage(loggedUser) { Title = "Main Page" },
                     Detail = new NavigationPage(new Gatherman.DataAccess.DBAccess(loggedUser))
                 };
         }

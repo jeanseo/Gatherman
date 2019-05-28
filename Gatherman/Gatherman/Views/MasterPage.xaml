@@ -90,6 +90,12 @@
                 </StackLayout>
                 <BoxView WidthRequest="1"/>
                 <StackLayout Orientation="Horizontal">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer 
+                        Tapped="onLogOff" 
+                        NumberOfTapsRequired="1"
+                        />
+                    </StackLayout.GestureRecognizers>
                     <Image
                                         BackgroundColor="Transparent"
                                         >
