@@ -54,28 +54,29 @@ namespace Gatherman.Views
 
         private async void OnLogin(object sender, EventArgs e)
         {
-            loggedUser.username = userNameEntry.Text;
-            loggedUser.password = passwordEntry.Text;
-            var authenticatedResult = await loggedUser.isAuthenticated();
-            if (authenticatedResult == 200)
+            if (userNameEntry.Text != null && passwordEntry.Text != null)
             {
-                Debug.Write(loggedUser.id);
-                Application.Current.Properties[Constants.KEY_CONNECTED] = true;
-                //await loggedUser.SaveUser();
-                string userToSave = JsonConvert.SerializeObject(loggedUser);
-                Application.Current.Properties[Constants.KEY_CREDENTIALS] = userToSave;
-                await Application.Current.SavePropertiesAsync();
-                Debug.Write("----------------\n" + Application.Current.Properties[Constants.KEY_CREDENTIALS]);
-                //await Navigation.PushModalAsync(App.mainPage(loggedUser));
-                //Device.BeginInvokeOnMainThread(() => App.Current.MainPage = MainPage);
-                Application.Current.MainPage = App.mainPage(loggedUser);
+                loggedUser.username = userNameEntry.Text;
+                loggedUser.password = passwordEntry.Text;
+                var authenticatedResult = await loggedUser.isAuthenticated();
+                if (authenticatedResult == 200)
+                {
+                    Debug.Write(loggedUser.id);
+                    Application.Current.Properties[Constants.KEY_CONNECTED] = true;
+                    //await loggedUser.SaveUser();
+                    string userToSave = JsonConvert.SerializeObject(loggedUser);
+                    Application.Current.Properties[Constants.KEY_CREDENTIALS] = userToSave;
+                    await Application.Current.SavePropertiesAsync();
+                    Debug.Write("----------------\n" + Application.Current.Properties[Constants.KEY_CREDENTIALS]);
+                    //await Navigation.PushModalAsync(App.mainPage(loggedUser));
+                    //Device.BeginInvokeOnMainThread(() => App.Current.MainPage = MainPage);
+                    Application.Current.MainPage = App.mainPage(loggedUser);
+                }
+                else
+                {
+                    await DisplayAlert("Erreur", authenticatedResult.ToString(), "OK");
+                }
             }
-            else
-            {
-                await DisplayAlert("Erreur", authenticatedResult.ToString(), "OK");
-            }
-            
-            
         }
     }
     

@@ -53,12 +53,12 @@ namespace Gatherman.DataAccess
             //On regarde si on doit lancer une initialisation ou une mise à jour des données
             if (!Application.Current.Properties.ContainsKey(Constants.KEY_LASTSYNC) || Application.Current.Properties[Constants.KEY_LASTSYNC] == null)
             {
-                if(!Constants.isOffline)
+                if(!Constantes.offline.isOffline)
                     await merchantService.initializeMerchantList(loggedUser);
             }
             else
             {
-                if (!Constants.isOffline)
+                if (!Constantes.offline.isOffline)
                     await merchantService.syncMerchant(loggedUser);
             }
             //On charge les données de la base locale
@@ -87,7 +87,7 @@ namespace Gatherman.DataAccess
             async Task RefreshList()
             {
                 Debug.Write("RefreshCommand");
-                if (!Constants.isOffline)
+                if (!Constantes.offline.isOffline)
                     await merchantService.syncMerchant(loggedUser);
                 _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
                 MerchantList.AddRange(await _connection.QueryAsync<Merchant>("SELECT * FROM Merchant WHERE deleted=?", false));
