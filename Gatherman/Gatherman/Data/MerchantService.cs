@@ -69,41 +69,10 @@ namespace Gatherman.Data
                 });
                 return;
             }
-            
+
             //On download les images manquantes
-
-            using (var webclient = new WebClient())
-            {
-                var mainDir = FileSystem.AppDataDirectory;
-                //Chercher le marchand dans la base locale
-                foreach (Merchant merchantObject in merchantList)
-                {
-                    try
-                    {
-                        if (merchantObject.pictureFileName != null || merchantObject.pictureFileName != "")
-                        {
-                            Merchant _merchant = await _connection.FindAsync<Merchant>(merchantObject.id);
-
-                            Uri uri = new Uri(Constants.GetPictureURL + _merchant.pictureFileName + Constants.AccessToken + loggedUser.id);
-                            Debug.Write(uri);
-
-                            webclient.DownloadFile(uri, mainDir + "/" + _merchant.pictureFileName);
-                            _merchant.pictureLocalPath = mainDir;
-                            await _connection.UpdateAsync(_merchant);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            Debug.Write(ex.ToString());
-                            Application.Current.MainPage.DisplayAlert("Erreur", "Une erreur s'est produite dans  la récupération d'images" + ex.Message, "OK");
-                        });
-                        return;
-                    }
-
-                }
-            }
+            await DownloadPictures(merchantList);
+            
 
 
             //On crée la donnée lastSync
@@ -185,6 +154,7 @@ namespace Gatherman.Data
                 }
 
                 //On download les images manquantes
+                //TODO A refactoriser
                 if (responseObject.picToDownload.Any())
                 {
                     Debug.Write("\n-----nombre d'images à download----" + responseObject.picToDownload.Count());
@@ -194,17 +164,30 @@ namespace Gatherman.Data
                         //Chercher le marchand dans la base locale
                         foreach (string merchantId in responseObject.picToDownload)
                         {
-                            if (merchantId!=null || merchantId != "")
+                            try
                             {
-                                Merchant _merchant = await _connection.FindAsync<Merchant>(merchantId);
+                                if (merchantId != null || merchantId != "")
+                                {
+                                    Merchant _merchant = await _connection.FindAsync<Merchant>(merchantId);
 
-                                Uri uri = new Uri(Constants.GetPictureURL+_merchant.pictureFileName+Constants.AccessToken+ loggedUser.id);
-                                Debug.Write(uri);
+                                    Uri uri = new Uri(Constants.GetPictureURL + _merchant.pictureFileName + Constants.AccessToken + loggedUser.id);
+                                    Debug.Write(uri);
 
-                                webclient.DownloadFile(uri, mainDir+"/"+_merchant.pictureFileName);
-                                _merchant.pictureLocalPath = mainDir;
-                                await _connection.UpdateAsync(_merchant);
+                                    webclient.DownloadFile(uri, mainDir + "/" + _merchant.pictureFileName);
+                                    _merchant.pictureLocalPath = mainDir;
+                                    await _connection.UpdateAsync(_merchant);
+                                }
                             }
+                            catch (Exception ex)
+                            {
+                                Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    Debug.Write(ex.ToString());
+                                    Application.Current.MainPage.DisplayAlert("Erreur", "Une erreur s'est produite dans  la récupération des photos" + ex.Message, "OK");
+                                });
+                                return;
+                            }
+                           
                         }
                     }
                 }
@@ -264,7 +247,41 @@ namespace Gatherman.Data
             
 
         }
+        private async Task DownloadPictures(List<Merchant> merchantList)
+        {
+            using (var webclient = new WebClient())
+            {
+                var mainDir = FileSystem.AppDataDirectory;
+                //Chercher le marchand dans la base locale
+                foreach (Merchant merchantObject in merchantList)
+                {
+                    try
+                    {
+                        if (merchantObject.pictureFileName != null || merchantObject.pictureFileName != "")
+                        {
+                            Merchant _merchant = await _connection.FindAsync<Merchant>(merchantObject.id);
 
-        
+                            Uri uri = new Uri(Constants.GetPictureURL + _merchant.pictureFileName + Constants.AccessToken + loggedUser.id);
+                            Debug.Write(uri);
+
+                            webclient.DownloadFile(uri, mainDir + "/" + _merchant.pictureFileName);
+                            _merchant.pictureLocalPath = mainDir;
+                            await _connection.UpdateAsync(_merchant);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            Debug.Write(ex.ToString());
+                            Application.Current.MainPage.DisplayAlert("Erreur", "Une erreur s'est produite dans  la récupération d'images" + ex.Message, "OK");
+                        });
+                        return;
+                    }
+
+                }
+            }
+        }
     }
+
 }
