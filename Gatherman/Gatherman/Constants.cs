@@ -9,7 +9,7 @@ namespace Gatherman
         public const string PostMerchantURL = BaseAddress + "Merchants" + AccessToken;
         public const string PostPushURL = BaseAddress + "Merchants/push" + AccessToken;
         public const string PostPictureURL = BaseAddress + "containers/photos/upload" + AccessToken;
-        public const string GetPictureURL = BaseAddress + "containers/photos/photos/download/";
+        public const string GetPictureURL = BaseAddress + "containers/photos/download/";
         public const string PostLoginURL = BaseAddress + "Users/login";
         public const string PostLogoutURL = BaseAddress + "Users/logout";
         public const string KEY_LASTSYNC = "lastSync";

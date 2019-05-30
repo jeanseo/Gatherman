@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Essentials;
 
 namespace Gatherman.Data
 {
@@ -53,9 +54,58 @@ namespace Gatherman.Data
             //Connection et ajout à la BDD locale
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
             Debug.Write("------à insérer-------\n" + JsonConvert.SerializeObject(merchantList));
-            await _connection.CreateTableAsync<Merchant>();
-            int rows = await _connection.InsertAllAsync(merchantList);
-            Debug.Write("------"+rows+" lignes insérées-------\n" + JsonConvert.SerializeObject(merchantList));
+            try
+            {
+                await _connection.CreateTableAsync<Merchant>();
+                int rows = await _connection.InsertAllAsync(merchantList);
+                Debug.Write("------" + rows + " lignes insérées-------\n" + JsonConvert.SerializeObject(merchantList));
+            }
+            catch (Exception ex)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Debug.Write(ex.ToString());
+                    Application.Current.MainPage.DisplayAlert("Erreur", "Une erreur s'est produite dans  la récupération des données" + ex.Message, "OK");
+                });
+                return;
+            }
+            
+            //On download les images manquantes
+
+            using (var webclient = new WebClient())
+            {
+                var mainDir = FileSystem.AppDataDirectory;
+                //Chercher le marchand dans la base locale
+                foreach (Merchant merchantObject in merchantList)
+                {
+                    try
+                    {
+                        if (merchantObject.pictureFileName != null || merchantObject.pictureFileName != "")
+                        {
+                            Merchant _merchant = await _connection.FindAsync<Merchant>(merchantObject.id);
+
+                            Uri uri = new Uri(Constants.GetPictureURL + _merchant.pictureFileName + Constants.AccessToken + loggedUser.id);
+                            Debug.Write(uri);
+
+                            webclient.DownloadFile(uri, mainDir + "/" + _merchant.pictureFileName);
+                            _merchant.pictureLocalPath = mainDir;
+                            await _connection.UpdateAsync(_merchant);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            Debug.Write(ex.ToString());
+                            Application.Current.MainPage.DisplayAlert("Erreur", "Une erreur s'est produite dans  la récupération d'images" + ex.Message, "OK");
+                        });
+                        return;
+                    }
+
+                }
+            }
+
+
             //On crée la donnée lastSync
             Application.Current.Properties[Constants.KEY_LASTSYNC] = DateTime.UtcNow;
             await Application.Current.SavePropertiesAsync();
@@ -140,6 +190,7 @@ namespace Gatherman.Data
                     Debug.Write("\n-----nombre d'images à download----" + responseObject.picToDownload.Count());
                     using (var webclient = new WebClient())
                     {
+                        var mainDir = FileSystem.AppDataDirectory;
                         //Chercher le marchand dans la base locale
                         foreach (string merchantId in responseObject.picToDownload)
                         {
@@ -149,6 +200,10 @@ namespace Gatherman.Data
 
                                 Uri uri = new Uri(Constants.GetPictureURL+_merchant.pictureFileName+Constants.AccessToken+ loggedUser.id);
                                 Debug.Write(uri);
+
+                                webclient.DownloadFile(uri, mainDir+"/"+_merchant.pictureFileName);
+                                _merchant.pictureLocalPath = mainDir;
+                                await _connection.UpdateAsync(_merchant);
                             }
                         }
                     }
@@ -204,37 +259,12 @@ namespace Gatherman.Data
             }
             
             // Requête delete, on récupère dans la liste insert ceux qui sont deleted, et on les delete de la base locale
-            //on recherche les objets à supprimer
-
             await _connection.Table<Merchant>().Where(x => x.deleted == true).DeleteAsync();
 
-            //TODO Gerer les envois d'images
-            //Upload de l'image
-            /*if (merchant.picturePath != null)
-            {
-                Uri uri = new Uri(Constants.PostPictureURL);
-                using (var webclient = new WebClient())
-                {
-                    webclient.UploadFileCompleted += new UploadFileCompletedEventHandler((object sender2, UploadFileCompletedEventArgs e2) =>{
-                        Debug.Write(e2);
-                    });
-
-                    try
-                    {
-                        webclient.UploadFileAsync(uri, merchant.picturePath);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        //await DisplayAlert("Erreur", "Une erreur réseau s'est produite: " + ex.Message, "OK");
-                    }
-                }
-
-            }
-            */
-
+            
 
         }
 
+        
     }
 }

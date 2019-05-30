@@ -162,6 +162,7 @@ namespace Gatherman.Views
         private async void OnPickPicture()
             {
             //TODO Gérer si on annule la prise de vue
+            //TODO Changer le nom du fichier pour un nom unique (Guid)
             var mediaOptions = new PickMediaOptions
             {
                     PhotoSize = PhotoSize.Medium,

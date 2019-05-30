@@ -26,6 +26,7 @@ namespace Gatherman.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
             CachedImageRenderer.Init(enableFastRenderer: true);
+            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             LoadApplication(new App());
         }
         //Gestion du bouton précédent lorsqu'une popup est ouverte
@@ -41,5 +42,12 @@ namespace Gatherman.Droid
                 // Do something if there are not any pages in the `PopupStack`
             }
         }
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        {
+            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
     }
 }
