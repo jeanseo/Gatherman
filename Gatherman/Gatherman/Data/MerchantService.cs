@@ -25,6 +25,8 @@ namespace Gatherman.Data
         {
             public List<Merchant> toInsert { get; set; }
             public List<Merchant> toUpdate { get; set; }
+            public List<string> picToUpload { get; set; }
+            public List<string> picToDownload { get; set; }
             public DateTime lastSync { get; set; }
         }
 
@@ -131,7 +133,61 @@ namespace Gatherman.Data
                     Debug.Write("\n-----nombre d'insert----" + responseObject.toInsert.Count());
                     await _connection.InsertAllAsync(responseObject.toInsert);
                 }
-                    
+
+                //On download les images manquantes
+                if (responseObject.picToDownload.Any())
+                {
+                    Debug.Write("\n-----nombre d'images à download----" + responseObject.picToDownload.Count());
+                    using (var webclient = new WebClient())
+                    {
+                        //Chercher le marchand dans la base locale
+                        foreach (string merchantId in responseObject.picToDownload)
+                        {
+                            if (merchantId!=null || merchantId != "")
+                            {
+                                Merchant _merchant = await _connection.FindAsync<Merchant>(merchantId);
+
+                                Uri uri = new Uri(Constants.GetPictureURL+_merchant.pictureFileName+Constants.AccessToken+ loggedUser.id);
+                                Debug.Write(uri);
+                            }
+                        }
+                    }
+                }
+                //On uploade les images manquantes
+                if (responseObject.picToUpload.Any())
+                {
+                    Debug.Write("\n-----nombre d'images à upload----" + responseObject.picToUpload.Count());
+                    using (var webclient = new WebClient())
+                    {
+                        //Chercher le marchand dans la base locale
+                        foreach (string merchantId in responseObject.picToUpload)
+                        {
+                            if (merchantId != null || merchantId != "")
+                            {
+                                Merchant _merchant = await _connection.FindAsync<Merchant>(merchantId);
+
+                                Uri uri = new Uri(Constants.PostPictureURL);
+                                webclient.UploadFileCompleted += new UploadFileCompletedEventHandler((object sender2, UploadFileCompletedEventArgs e2) => {
+                                    Debug.Write(e2);
+                                });
+
+                                try
+                                {
+                                    webclient.UploadFile(uri, _merchant.pictureLocalPath + "/" + _merchant.pictureFileName);
+                                    //webclient.UploadFileAsync(uri, _merchant.pictureLocalPath+"/"+_merchant.pictureFileName);
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    await Application.Current.MainPage.DisplayAlert("Erreur", "Une erreur s'est produite lors de l'upload des photos: " + ex.Message, "OK");
+                                }
+
+                                Debug.Write(uri);
+                            }
+                        }
+                    }
+                }
+
                 //On met à jour la date de lastSync
                 Debug.Write("\n-------DATE RENVOYEE------\n" + responseObject.lastSync.ToString());
                 Application.Current.Properties[Constants.KEY_LASTSYNC] = responseObject.lastSync;

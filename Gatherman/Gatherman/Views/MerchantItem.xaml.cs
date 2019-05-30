@@ -136,7 +136,6 @@ namespace Gatherman.Views
 
         private async void OnCamera()
         {
-            //TODO Gérer si on annule la prise de vue
             //TODO Verifier les autorisations
             if (CrossMedia.Current.IsCameraAvailable && CrossMedia.Current.IsTakePhotoSupported)
             {
