@@ -71,6 +71,7 @@ namespace Gatherman.Data
             }
 
             //On download les images manquantes
+            Debug.Write("-----DOWNLOAD d'IMAGES----\n On lance la tache de telechargement");
             await DownloadPictures(merchantList);
             
 
@@ -260,13 +261,17 @@ namespace Gatherman.Data
                         if (merchantObject.pictureFileName != null || merchantObject.pictureFileName != "")
                         {
                             Merchant _merchant = await _connection.FindAsync<Merchant>(merchantObject.id);
+                            if(_merchant.pictureFileName!=null || _merchant.pictureFileName != "")
+                            {
+                                Debug.Write("-----DOWNLOAD d'IMAGES----\n" + _merchant.FullName + "\n" + _merchant.pictureFileName);
+                                Uri uri = new Uri(Constants.GetPictureURL + _merchant.pictureFileName + Constants.AccessToken + loggedUser.id);
+                                Debug.Write("-----DOWNLOAD d'IMAGES----\n" + uri);
+                                Debug.Write("-----DOWNLOAD d'IMAGES----\n" + mainDir + "/" + _merchant.pictureFileName);
 
-                            Uri uri = new Uri(Constants.GetPictureURL + _merchant.pictureFileName + Constants.AccessToken + loggedUser.id);
-                            Debug.Write(uri);
-
-                            webclient.DownloadFile(uri, mainDir + "/" + _merchant.pictureFileName);
-                            _merchant.pictureLocalPath = mainDir;
-                            await _connection.UpdateAsync(_merchant);
+                                webclient.DownloadFile(uri, mainDir + "/" + _merchant.pictureFileName);
+                                _merchant.pictureLocalPath = mainDir;
+                                await _connection.UpdateAsync(_merchant);
+                            }
                         }
                     }
                     catch (Exception ex)
