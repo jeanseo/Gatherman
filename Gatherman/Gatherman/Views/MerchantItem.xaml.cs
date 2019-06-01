@@ -17,6 +17,8 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using Rg.Plugins.Popup.Services;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 
 namespace Gatherman.Views
 {
@@ -152,27 +154,55 @@ namespace Gatherman.Views
 
         private async void OnCamera()
         {
-            //TODO Verifier les autorisations
-            if (CrossMedia.Current.IsCameraAvailable && CrossMedia.Current.IsTakePhotoSupported)
+            try
             {
-                // Supply media options for saving our photo after it's taken.
-                var mediaOptions = new StoreCameraMediaOptions
+                var status = await CrossPermissions.Current.CheckPermissionStatusAsync(Permission.Storage);
+                if (status != PermissionStatus.Granted)
                 {
-                    Directory = "Receipts",
-                    Name = $"{Guid.NewGuid()}.jpg",
-                    PhotoSize = PhotoSize.Medium,
-                    CompressionQuality = 80
-                };
+                    if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(Permission.Storage))
+                    {
+                        await DisplayAlert("Autorisation nécessaire", "Autorisation de stockage obligatoire", "OK");
+                    }
 
-                // Take a photo of the business receipt.
-                var file = await CrossMedia.Current.TakePhotoAsync(mediaOptions);
-                if (file != null)
-                {
-                    Picture.Source = file.Path;
-                    pictureFilePath = Path.GetDirectoryName(file.Path);
-                    pictureFileName = Path.GetFileName(file.Path);
+                    var response = await CrossPermissions.Current.RequestPermissionsAsync(Permission.Storage);
+                    status = response[Permission.Storage];
                 }
+
+                if (status == PermissionStatus.Granted)
+                {
+                    if (CrossMedia.Current.IsCameraAvailable && CrossMedia.Current.IsTakePhotoSupported)
+                    {
+                        // Supply media options for saving our photo after it's taken.
+                        var mediaOptions = new StoreCameraMediaOptions
+                        {
+                            Directory = "Receipts",
+                            Name = $"{Guid.NewGuid()}.jpg",
+                            PhotoSize = PhotoSize.Medium,
+                            CompressionQuality = 80
+                        };
+
+                        // Take a photo of the business receipt.
+                        var file = await CrossMedia.Current.TakePhotoAsync(mediaOptions);
+                        if (file != null)
+                        {
+                            Picture.Source = file.Path;
+                            pictureFilePath = Path.GetDirectoryName(file.Path);
+                            pictureFileName = Path.GetFileName(file.Path);
+                        }
+                    }
+                }
+                else if (status != PermissionStatus.Unknown)
+                {
+                    //location denied
+                }
+
             }
+            catch (Exception ex)
+            {
+
+            }
+            //TODO Verifier les autorisations
+            
         }
 
         private async void OnPickPicture()
