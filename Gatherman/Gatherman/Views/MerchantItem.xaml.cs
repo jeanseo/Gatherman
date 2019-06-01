@@ -65,6 +65,7 @@ namespace Gatherman.Views
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
             this.merchant = _merchant;
             this.EditForm = true;
+            //TODO Charger toutes les données
             EntryName.Text = this.merchant.lastName;
             EntryFirstName.Text = this.merchant.firstName;
             Picture.Source = this.merchant.pictureFullPath;
@@ -100,6 +101,10 @@ namespace Gatherman.Views
             {
                 this.merchant.lastName = EntryName.Text;
                 this.merchant.firstName = EntryFirstName.Text;
+                this.merchant.email = EntryEmail.Text;
+                this.merchant.phone = EntryPhone.Text;
+                this.merchant.incoming = Convert.ToInt32(EntryIncoming.Text);
+                this.merchant.holidays = Convert.ToInt32(EntryHolidays.Text);
                 this.merchant.lastUpdated = DateTime.Now;
 
                 if (this.merchant.pictureFileName != null && pictureFileName != null)
@@ -119,7 +124,18 @@ namespace Gatherman.Views
             {
                 Guid id = Guid.NewGuid();
                 Debug.Write(id);
-                var merchant = new Merchant { lastName = EntryName.Text, firstName = EntryFirstName.Text, pictureFileName = pictureFileName, pictureLocalPath = pictureFilePath, creationDate = DateTime.Now, lastUpdated = DateTime.Now, deleted = false ,id = id
+                var merchant = new Merchant {
+                    lastName = EntryName.Text,
+                    firstName = EntryFirstName.Text,
+                    pictureFileName = pictureFileName,
+                    pictureLocalPath = pictureFilePath,
+                    email = EntryEmail.Text,
+                    phone = EntryPhone.Text,
+                    incoming = Convert.ToInt32(EntryIncoming.Text),
+                    holidays = Convert.ToInt32(EntryHolidays.Text),
+                    creationDate = DateTime.Now,
+                    lastUpdated = DateTime.Now,
+                    deleted = false ,id = id
             };
             
                 await _connection.InsertAsync(merchant);

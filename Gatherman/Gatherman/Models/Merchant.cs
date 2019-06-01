@@ -113,6 +113,13 @@ namespace Gatherman.DataAccess.Model
 
         public DateTime lastUpdated { get; set; }
         public DateTime creationDate { get; set; }
+        public string email { get; set;}
+        public string phone { get; set; }
+        public float incoming { get; set; }
+        public float holidays { get; set; }
+
+
+
         private Boolean _deleted;
         public Boolean deleted {
             get { return _deleted; }

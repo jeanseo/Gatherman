@@ -90,7 +90,9 @@ namespace Gatherman.DataAccess
                 if (!Constantes.offline.isOffline)
                     await merchantService.syncMerchant(loggedUser);
                 _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
-                MerchantList.AddRange(await _connection.QueryAsync<Merchant>("SELECT * FROM Merchant WHERE deleted=?", false));
+                MerchantList = await _connection.QueryAsync<Merchant>("SELECT * FROM Merchant WHERE deleted=?", false);
+                _Merchants = null;
+                _Merchants = new ObservableCollection<Merchant>(MerchantList);
                 lstVMerchant.ItemsSource = null;
                 lstVMerchant.ItemsSource = _Merchants;
                 lstVMerchant.IsRefreshing = false;
