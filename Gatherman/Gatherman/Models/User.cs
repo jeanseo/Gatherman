@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Gatherman.Models
@@ -26,6 +28,15 @@ namespace Gatherman.Models
             public int ttl { get; set; }
             public DateTime created { get; set; }
             public int userId { get; set; }
+            public string firstName { get; set; }
+            public string lastName { get; set; }
+            public DateTime birthDate { get; set; }
+            public string birthPlace { get; set; }
+            public string phoneNumber { get; set; }
+            public string pictureFileName { get; set; }
+            public string pictureLocalPath { get; set; }
+            public string address { get; set; }
+            public string email { get; set; }
         }
 
         private struct _user
@@ -37,6 +48,14 @@ namespace Gatherman.Models
             public int ttl { get; set; }
             public DateTime created { get; set; }
             public int userId { get; set; }
+            public string firstName { get; set; }
+            public string lastName { get; set; }
+            public DateTime birthDate { get; set; }
+            public string birthPlace { get; set; }
+            public string phoneNumber { get; set; }
+            public string pictureFileName { get; set; }
+            public string pictureLocalPath { get; set; }
+            public string address { get; set; }
         }
 
 
@@ -47,6 +66,33 @@ namespace Gatherman.Models
         public int ttl { get; set; }
         public DateTime created { get; set; }
         public int userId { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public DateTime birthDate { get; set; }
+        public string birthPlace { get; set; }
+        public string phoneNumber { get; set; }
+        public string pictureFileName { get; set; }
+        public string pictureLocalPath { get; set; }
+        public string address { get; set; }
+
+        public string fullName
+        {
+            get { return string.Format("{0} {1}", firstName, lastName); }
+        }
+
+        public ImageSource pictureFullPath
+        {
+            get
+            {
+                if (this.pictureFileName == null)
+                {
+                    return ImageSource.FromResource("Gatherman.images.default_portrait.png");
+                }
+
+                else
+                    return ImageSource.FromFile(this.pictureLocalPath + "/" + this.pictureFileName);
+            }
+        }
 
         public User()
         {
@@ -63,7 +109,16 @@ namespace Gatherman.Models
                 this.ttl = existingUser.ttl;
                 this.created = existingUser.created;
                 this.userId = existingUser.userId;
-            }
+                this.firstName = existingUser.firstName;
+                this.lastName = existingUser.lastName;
+                this.birthDate = existingUser.birthDate;
+                this.birthPlace = existingUser.birthPlace;
+                this.phoneNumber = existingUser.phoneNumber;
+                this.pictureFileName = existingUser.pictureFileName;
+                this.pictureLocalPath = existingUser.pictureLocalPath;
+                this.address = existingUser.address;
+                
+    }
 
         }
 
@@ -73,28 +128,65 @@ namespace Gatherman.Models
             LoginAPIPostObject body = new LoginAPIPostObject { username = this.username, password = this.password };
             try
             {
-
-
                 using (var client = new HttpClient())
                 {
-                    //Push vers l'API
+                    //Requete de connexion
                     Debug.Write(this.username);
                     string content = JsonConvert.SerializeObject(this);
-                    Debug.Write("--------Requête JSON-------" + content);
+                    Debug.Write("--------Requête JSON de connexion-------" + content);
 
                     response = await client.PostAsync(Constants.PostLoginURL, new StringContent(content, Encoding.UTF8, "application/json"));
+                    Debug.Write(response);
                 }
                 if (response.IsSuccessStatusCode)
                 {
                     // Handle success
                     string responseBody = await response.Content.ReadAsStringAsync();
                     LoginAPIResponseObject loggedUser = JsonConvert.DeserializeObject<LoginAPIResponseObject>(responseBody);
-                    //On réécrie les username et password qui ont été effacés par le retour de la requête
+                    //On récupère les infos renvoyées lors de la connexion
                     id = loggedUser.id;
                     ttl = loggedUser.ttl;
+                    userId = loggedUser.userId;
                     created = loggedUser.created;
-                    created = loggedUser.created;
+                    //TODO on lance une requête pour récupérer les informations complètes de l'utilisateur
+                    using (var client = new HttpClient())
+                    {
+                        Debug.Write(Constants.GetUserURL + userId + "?access_token=" + id);
+                        response = await client.GetAsync(Constants.GetUserURL + userId + "?access_token=" + id);
+                    }
+                    if (response.IsSuccessStatusCode)
+                    {
+                        responseBody = await response.Content.ReadAsStringAsync();
+                        loggedUser = JsonConvert.DeserializeObject<LoginAPIResponseObject>(responseBody);
+
+                    }
+                    
+                    firstName = loggedUser.firstName;
+                    Debug.Write("firstname"+firstName);
+                    lastName = loggedUser.lastName;
+                    birthDate = loggedUser.birthDate;
+                    birthPlace = loggedUser.birthPlace;
+                    phoneNumber = loggedUser.phoneNumber;
+                    pictureFileName = loggedUser.pictureFileName;
+                    email = loggedUser.email;
+                    Debug.Write("email:" + email);
+                    address = loggedUser.address;
+                    if(pictureFileName!=null || pictureFileName != "")
+                    {
+                        using (var webclient = new WebClient())
+                        {
+                            var mainDir = FileSystem.AppDataDirectory;
+                            Uri uri = new Uri(Constants.GetPictureURL + pictureFileName + Constants.AccessToken + id);
+                            webclient.DownloadFileAsync(uri, mainDir + "/" + pictureFileName);
+                            pictureLocalPath = mainDir;
+                        }
+                    }
+                    
+
                     return 200;
+                    //On récupère l'image
+
+
                 }
                 else
                 {
@@ -142,9 +234,9 @@ namespace Gatherman.Models
             
             return 0;
             */
-        }
+                }
 
 
-    }
+            }
 
 }

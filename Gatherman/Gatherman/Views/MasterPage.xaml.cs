@@ -19,6 +19,12 @@ namespace Gatherman.Views
         {
             InitializeComponent();
             loggedUser = _loggedUser;
+            BindingContext = this;
+            labelName.Text = loggedUser.fullName;
+            labelEmail.Text = loggedUser.email;
+            labelPhoneNumber.Text = loggedUser.phoneNumber;
+            portrait.Source = loggedUser.pictureFullPath;
+
         }
 
         protected override async void OnAppearing()
@@ -37,7 +43,7 @@ namespace Gatherman.Views
         private async void onLogOff(object sender, EventArgs e)
         {
             await loggedUser.logOff();
-
+            Constantes.offline.isOffline = false;
             Application.Current.MainPage = new LoginPage(loggedUser);
         }
     }

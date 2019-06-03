@@ -13,7 +13,7 @@
             RowSpacing="0"
             ColumnSpacing="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="120" />
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -27,7 +27,7 @@
                 VerticalOptions="FillAndExpand"
                 HorizontalOptions="FillAndExpand"
                 BackgroundColor="{DynamicResource PrimaryColor}">
-                <Label Text="Charlie Brown"
+                <Label x:Name="labelName"
                        TextColor="{DynamicResource SecondaryTextColor}"
                        FontSize="20"
                        FontAttributes="Bold"
@@ -35,10 +35,10 @@
                 <Label Text="Agent de collecte" 
                        TextColor="{DynamicResource SecondaryTextColor}"
                        FontSize="12"/>
-                <Label Text="charlie.brown@peanuts.com" 
+                <Label x:Name="labelEmail"
                        TextColor="{DynamicResource SecondaryTextColor}"
                        FontSize="14"/>
-                <Label Text="+12125550908" 
+                <Label x:Name="labelPhoneNumber" 
                        TextColor="{DynamicResource SecondaryTextColor}"
                        FontSize="14"/>
             </StackLayout>
@@ -51,11 +51,11 @@
                
                 >
                 <ff:CachedImage 
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        VerticalOptions="CenterAndExpand"
-                                        WidthRequest="80"
-                                        Source="https://www.babelio.com/users/QUIZ_Charlie-Brown-et-les-Peanuts_1325.jpeg">
+                        x:Name="portrait"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        VerticalOptions="CenterAndExpand"
+                        WidthRequest="80">
                     <ff:CachedImage.Transformations>
                         <ffTransformations:CircleTransformation />
                     </ff:CachedImage.Transformations>

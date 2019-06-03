@@ -79,6 +79,7 @@ namespace Gatherman.DataAccess.Model
         }
 
         private string _pictureLocalPath;
+        [MaxLength(255)]
         public string pictureLocalPath
         {
             get { return _pictureLocalPath; }
@@ -113,7 +114,9 @@ namespace Gatherman.DataAccess.Model
 
         public DateTime lastUpdated { get; set; }
         public DateTime creationDate { get; set; }
+        [MaxLength(255)]
         public string email { get; set;}
+        [MaxLength(255)]
         public string phone { get; set; }
         public float incoming { get; set; }
         public float holidays { get; set; }
