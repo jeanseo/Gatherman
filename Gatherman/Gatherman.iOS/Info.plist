@@ -48,5 +48,7 @@
 	<array>
 		<string>materialicons-regular.ttf</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access location when open.</string>
 </dict>
 </plist>
