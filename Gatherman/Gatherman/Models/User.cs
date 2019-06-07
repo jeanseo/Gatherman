@@ -62,6 +62,7 @@ namespace Gatherman.Models
         public string username { get; set; }
         public string email { get; set; }
         public string password { get; set; }
+        [JsonIgnore]
         public string id { get; set; }
         public int ttl { get; set; }
         public DateTime created { get; set; }
@@ -72,9 +73,11 @@ namespace Gatherman.Models
         public string birthPlace { get; set; }
         public string phoneNumber { get; set; }
         public string pictureFileName { get; set; }
+        [JsonIgnore]
         public string pictureLocalPath { get; set; }
         public string address { get; set; }
 
+        [JsonIgnore]
         public string fullName
         {
             get { return string.Format("{0} {1}", firstName, lastName); }
@@ -93,6 +96,19 @@ namespace Gatherman.Models
                     return ImageSource.FromFile(this.pictureLocalPath + "/" + this.pictureFileName);
             }
         }
+
+        private struct lastLoginData
+        {
+            public Location LastLoginPlace { get; set; }
+            public DateTime LastLoginDate
+            {
+                get
+                {
+                    return DateTime.UtcNow;
+                }
+            }
+        }
+
 
         public User()
         {
@@ -120,6 +136,28 @@ namespace Gatherman.Models
                 
     }
 
+        }
+        private async Task<Location> GetLocation()
+        {
+            try
+            {
+                var request = new GeolocationRequest(GeolocationAccuracy.Medium);
+                var location = await Geolocation.GetLocationAsync(request);
+
+                if (location != null)
+                {
+                    Debug.Write($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
+                }
+                else
+                {
+                    location = await Geolocation.GetLastKnownLocationAsync();
+                }
+                return location;
+            }
+            catch (Exception ex)
+            {                
+                return null;
+            }
         }
 
         public async Task<int> isAuthenticated()
@@ -181,9 +219,10 @@ namespace Gatherman.Models
                             pictureLocalPath = mainDir;
                         }
                     }
-                    
+                    // Envoi des informations de connexion au serveur
+                    updateUser();
 
-                    return 200;
+                        return 200;
                     //On récupère l'image
 
 
@@ -203,6 +242,31 @@ namespace Gatherman.Models
             return 0;
 
         }
+
+        private async Task updateUser()
+        {
+            Location lastLoginPlace  = await GetLocation();
+            string content = String.Format("{{\"lastLoginDate\": \"{0:yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'}\",\"lastLoginPlace\": {{\"lat\":{1},\"lng\":{2}}}}}",
+                DateTime.UtcNow, JsonConvert.SerializeObject(lastLoginPlace.Latitude), JsonConvert.SerializeObject(lastLoginPlace.Longitude));
+            Debug.Write("-----Requete d'update du user-----"+content);
+            //Faire une requete PATCH
+            string url = Constants.GetUserURL + userId + Constants.AccessToken + id;
+            using (var client = new HttpClient())
+            {
+                var method = new HttpMethod("PATCH");
+
+                var request = new HttpRequestMessage(method, url)
+                {
+                    Content = new StringContent(
+                                    content,
+                                    Encoding.UTF8, "application/json")
+                };
+                var response = await client.SendAsync(request);
+                Debug.Write("-----Reponse de la requete PATCH----"+response);
+            }
+            
+            }
+        
 
         public async Task<int> logOff()
         {

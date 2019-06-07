@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Xamarin.Forms;
+using Newtonsoft.Json;
 
 namespace Gatherman.DataAccess.Model
 {
@@ -15,20 +16,20 @@ namespace Gatherman.DataAccess.Model
         [PrimaryKey]
         public Guid id { get; set;}
 
-        private string _name;
+        private string _lastName;
 
         [MaxLength(255)]
         public string lastName {
-            get { return _name; }
+            get { return _lastName; }
             set
             {
-                if (_name == value)
+                if (_lastName == value)
                 {
                     //aucune modification
                     return;
                 }
                 //Il y a eu modification
-                _name = value;
+                _lastName = value;
                 
                 OnPropertyChanged();
             }
@@ -54,6 +55,7 @@ namespace Gatherman.DataAccess.Model
             }
         }
 
+        [JsonIgnore]
         public string FullName
         {
             get { return string.Format("{0} {1}", firstName, lastName); }
@@ -79,7 +81,7 @@ namespace Gatherman.DataAccess.Model
         }
 
         private string _pictureLocalPath;
-        [MaxLength(255)]
+        [MaxLength(255)][JsonIgnore]
         public string pictureLocalPath
         {
             get { return _pictureLocalPath; }
@@ -97,7 +99,7 @@ namespace Gatherman.DataAccess.Model
                 OnPropertyChanged();
             }
         }
-
+        [JsonIgnore]
         public ImageSource pictureFullPath
         {
             get
