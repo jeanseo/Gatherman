@@ -19,6 +19,9 @@ using System.Diagnostics;
 using Rg.Plugins.Popup.Services;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
+using Gatherman.Models;
+using System.Collections.ObjectModel;
+using Gatherman.ViewModels;
 
 namespace Gatherman.Views
 {
@@ -56,7 +59,12 @@ namespace Gatherman.Views
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
             this.EditForm = false;
             Picture.Source = ImageSource.FromResource("Gatherman.images.default_portrait.png");
-            
+        }
+
+        private async Task<List<Market>> GetMarketList()
+        {
+            var db = _connection.Table<Market>();
+            return await db.ToListAsync();
         }
 
         public MerchantForm(Merchant _merchant)
@@ -71,11 +79,21 @@ namespace Gatherman.Views
             EntryName.Text = this.merchant.lastName;
             EntryFirstName.Text = this.merchant.firstName;
             Picture.Source = this.merchant.pictureFullPath;
-            
+
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
+            _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
+            Debug.Write(await GetMarketList());
+            this.BindingContext = new RootModel
+            {
+                MarketList = await GetMarketList()
+            };
+
+            //marketList.ForEach(market => {
+            //    PickerMarket.Items.Add(market.name);
+            //});
             MessagingCenter.Subscribe<MyMessage>(this, "PopUpData", (value) =>
             {
                 int choice = value.Myvalue;
@@ -228,5 +246,6 @@ namespace Gatherman.Views
             
             await PopupNavigation.PushAsync(new popup.addPicturePopup(),false);
         }
+
     }
 }

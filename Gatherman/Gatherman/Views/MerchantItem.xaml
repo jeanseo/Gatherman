@@ -182,6 +182,24 @@
                                             Color="{DynamicResource PrimaryTextColor}"/>
                             </Image.Source>
                         </Image>
+                        <Picker Title="Marché"
+                                x:Name="PickerMarket"
+                                ItemsSource="{Binding MarketList}"
+                                ItemDisplayBinding="{Binding name}"/>      
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal">
+                        <Image
+                    VerticalOptions="Center"
+                    BackgroundColor="Transparent"
+                    >
+                            <Image.Source>
+                                <FontImageSource Glyph="&#xe227;"
+                                            FontFamily="{DynamicResource MaterialIconsFont}"
+                                            Size="40"
+                                            Color="{DynamicResource PrimaryTextColor}"/>
+                            </Image.Source>
+                        </Image>
                         <Entry 
                             HorizontalOptions="FillAndExpand"
                             Placeholder="Revenus / jour"

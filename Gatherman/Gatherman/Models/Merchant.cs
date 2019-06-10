@@ -120,6 +120,8 @@ namespace Gatherman.DataAccess.Model
         public string email { get; set;}
         [MaxLength(255)]
         public string phone { get; set; }
+
+        public int? marketid { get; set; }
         public float incoming { get; set; }
         public float holidays { get; set; }
 

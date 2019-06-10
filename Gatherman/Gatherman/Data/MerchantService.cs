@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Essentials;
+using Gatherman.Models;
 
 namespace Gatherman.Data
 {
@@ -49,6 +50,7 @@ namespace Gatherman.Data
                 response.EnsureSuccessStatusCode();
             }
             string responseBody = await response.Content.ReadAsStringAsync();
+            Debug.Write(responseBody);
             var merchantList = new List<Merchant>();
             merchantList = JsonConvert.DeserializeObject<List<Merchant>>(responseBody);
             //Connection et ajout à la BDD locale
@@ -73,13 +75,38 @@ namespace Gatherman.Data
             //On download les images manquantes
             Debug.Write("-----DOWNLOAD d'IMAGES----\n On lance la tache de telechargement");
             await DownloadPictures(merchantList);
-            
 
+            //On récupère la liste des marchés
+            using (var client = new HttpClient())
+            {
+                response = await client.GetAsync(Constants.GetMarketURL + loggedUser.id);
+                response.EnsureSuccessStatusCode();
+            }
+            responseBody = await response.Content.ReadAsStringAsync();
+            var marketList = new List<Market>();
+            marketList = JsonConvert.DeserializeObject<List<Market>>(responseBody);
+            try
+            {
+                await _connection.CreateTableAsync<Market>();
+                int rows = await _connection.InsertAllAsync(marketList);
+                Debug.Write("------" + rows + " lignes insérées-------\n" + JsonConvert.SerializeObject(marketList));
+            }
+            catch (Exception ex)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Debug.Write(ex.ToString());
+                    Application.Current.MainPage.DisplayAlert("Erreur", "Une erreur s'est produite dans  la récupération des données" + ex.Message, "OK");
+                });
+                return;
+            }
 
             //On crée la donnée lastSync
             Application.Current.Properties[Constants.KEY_LASTSYNC] = DateTime.UtcNow;
             await Application.Current.SavePropertiesAsync();
             Debug.Write("fin de l'initialisation");
+
+            
            
         }
 

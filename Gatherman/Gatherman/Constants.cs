@@ -13,6 +13,7 @@ namespace Gatherman
         public const string PostLoginURL = BaseAddress + "agents/login";
         public const string PostLogoutURL = BaseAddress + "agents/logout";
         public const string GetUserURL = BaseAddress + "agents/";
+        public const string GetMarketURL = BaseAddress + "markets/"+AccessToken;
         public const string KEY_LASTSYNC = "lastSync";
         public const string KEY_CONNECTED = "connected";
         public const string KEY_CREDENTIALS = "credentials";
