@@ -79,6 +79,7 @@ namespace Gatherman.Views
             EntryName.Text = this.merchant.lastName;
             EntryFirstName.Text = this.merchant.firstName;
             Picture.Source = this.merchant.pictureFullPath;
+            
 
         }
 
@@ -90,10 +91,18 @@ namespace Gatherman.Views
             {
                 MarketList = await GetMarketList()
             };
-
-            //marketList.ForEach(market => {
-            //    PickerMarket.Items.Add(market.name);
-            //});
+            var _MarketList = await GetMarketList();
+            Debug.Write(JsonConvert.SerializeObject(_MarketList));
+            if (EditForm == true)
+            {
+                for (int x = 0; x < _MarketList.Count; x++)
+                {
+                    if (_MarketList[x].id == this.merchant.marketid)
+                    {
+                        PickerMarket.SelectedIndex = x;
+                    }
+                }
+            }
             MessagingCenter.Subscribe<MyMessage>(this, "PopUpData", (value) =>
             {
                 int choice = value.Myvalue;

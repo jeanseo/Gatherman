@@ -176,7 +176,7 @@
                     BackgroundColor="Transparent"
                     >
                             <Image.Source>
-                                <FontImageSource Glyph="&#xe227;"
+                                <FontImageSource Glyph="&#xe55f;"
                                             FontFamily="{DynamicResource MaterialIconsFont}"
                                             Size="40"
                                             Color="{DynamicResource PrimaryTextColor}"/>
@@ -184,6 +184,7 @@
                         </Image>
                         <Picker Title="Marché"
                                 x:Name="PickerMarket"
+                                HorizontalOptions="FillAndExpand"
                                 ItemsSource="{Binding MarketList}"
                                 ItemDisplayBinding="{Binding name}"/>      
                     </StackLayout>
