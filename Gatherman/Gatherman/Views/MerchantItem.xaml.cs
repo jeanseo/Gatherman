@@ -97,7 +97,7 @@ namespace Gatherman.Views
             {
                 for (int x = 0; x < _MarketList.Count; x++)
                 {
-                    if (_MarketList[x].id == this.merchant.marketid)
+                    if (_MarketList[x].id == this.merchant.marketId)
                     {
                         PickerMarket.SelectedIndex = x;
                     }
@@ -135,6 +135,8 @@ namespace Gatherman.Views
                 this.merchant.incoming = Convert.ToInt32(EntryIncoming.Text);
                 this.merchant.holidays = Convert.ToInt32(EntryHolidays.Text);
                 this.merchant.lastUpdated = DateTime.Now;
+                var market = (Market)PickerMarket.SelectedItem;
+                this.merchant.marketId = market.id;
 
                 if (this.merchant.pictureFileName != null && pictureFileName != null)
                 {
@@ -153,6 +155,7 @@ namespace Gatherman.Views
             {
                 Guid id = Guid.NewGuid();
                 Debug.Write(id);
+                var market = (Market)PickerMarket.SelectedItem;
                 var merchant = new Merchant {
                     lastName = EntryName.Text,
                     firstName = EntryFirstName.Text,
@@ -160,6 +163,7 @@ namespace Gatherman.Views
                     pictureLocalPath = pictureFilePath,
                     email = EntryEmail.Text,
                     phone = EntryPhone.Text,
+                    marketId = market.id,
                     incoming = Convert.ToInt32(EntryIncoming.Text),
                     holidays = Convert.ToInt32(EntryHolidays.Text),
                     creationDate = DateTime.Now,

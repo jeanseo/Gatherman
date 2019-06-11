@@ -121,7 +121,7 @@ namespace Gatherman.DataAccess.Model
         [MaxLength(255)]
         public string phone { get; set; }
 
-        public int? marketid { get; set; }
+        public int? marketId { get; set; }
         public float incoming { get; set; }
         public float holidays { get; set; }
 
