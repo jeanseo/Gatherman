@@ -79,8 +79,10 @@ namespace Gatherman.Views
             EntryName.Text = this.merchant.lastName;
             EntryFirstName.Text = this.merchant.firstName;
             Picture.Source = this.merchant.pictureFullPath;
-            
-
+            EntryEmail.Text = merchant.email;
+            EntryPhone.Text = merchant.phone;
+            EntryIncoming.Text = merchant.incoming.ToString();
+            EntryHolidays.Text = merchant.holidays.ToString();
         }
 
         protected override async void OnAppearing()
