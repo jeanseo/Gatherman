@@ -42,6 +42,7 @@ namespace Gatherman.DataAccess
         protected override async void OnAppearing()
         {
             InitializeComponent();
+            this.IsBusy = true;
             BindingContext = this;
             await _connection.CreateTableAsync<Merchant>();
 
@@ -69,6 +70,7 @@ namespace Gatherman.DataAccess
             Debug.Write("----------\n" + JsonConvert.SerializeObject(MerchantList));
             lstVMerchant.ItemsSource = null;
             lstVMerchant.ItemsSource = _Merchants;
+            this.IsBusy = false;
 
             //test de sélection d'un item
             lstVMerchant.ItemSelected += (sender, e) =>
@@ -77,7 +79,6 @@ namespace Gatherman.DataAccess
                 {
                     Merchant item = lstVMerchant.SelectedItem as Merchant;
                     Navigation.PushAsync(new MerchantForm(item));
-                    Debug.Write("\n\nVous averz cliqué sur " + item.FullName);
                 }
                 
             };
@@ -86,6 +87,7 @@ namespace Gatherman.DataAccess
              
             async Task RefreshList()
             {
+                this.IsBusy = true;
                 Debug.Write("RefreshCommand");
                 if (!Constantes.offline.isOffline)
                     await merchantService.syncMerchant(loggedUser);
@@ -96,6 +98,8 @@ namespace Gatherman.DataAccess
                 lstVMerchant.ItemsSource = null;
                 lstVMerchant.ItemsSource = _Merchants;
                 lstVMerchant.IsRefreshing = false;
+                this.IsBusy = false;
+
             }
 
         }

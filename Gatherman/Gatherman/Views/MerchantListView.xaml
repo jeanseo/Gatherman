@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Gatherman.DataAccess.DBAccess"
+             x:Name="merchantListView"
              xmlns:ui="clr-namespace:Vapolia.Lib.Ui;assembly=XamarinFormsGesture"
              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"  
              xmlns:ffSvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"  
@@ -11,76 +12,96 @@
              >
     
     <ContentPage.Content>
-        <AbsoluteLayout HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand">
-            
-        <StackLayout>
-            <ListView x:Name="lstVMerchant"
-                      IsPullToRefreshEnabled="True"
-                      IsEnabled="True"
-                      InputTransparent="False"
-                      RowHeight="80"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <AbsoluteLayout
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                BackgroundColor="{DynamicResource SecondaryTextColor}"
+                IsVisible="{Binding Source={x:Reference merchantListView}, Path=IsBusy}">
+                <ActivityIndicator x:Name="activity"  
+                                   IsRunning="{Binding Source={x:Reference merchantListView}, Path=IsBusy}"  
+                                   IsVisible="{Binding Source={x:Reference merchantListView}, Path=IsBusy}"
+                                   AbsoluteLayout.LayoutBounds="0.5,0.5,100,100"
+                                   AbsoluteLayout.LayoutFlags="PositionProportional"
+                                   Color="{DynamicResource PrimaryColor}"
+                       />
+            </AbsoluteLayout>
+            <AbsoluteLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                <StackLayout>
+                    <ListView x:Name="lstVMerchant"
+                              IsPullToRefreshEnabled="True"
+                              IsEnabled="True"
+                              InputTransparent="False"
+                              RowHeight="80"
+                              VerticalOptions="FillAndExpand"
                       >
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                            <ViewCell>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="90" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="40"/>
-                                    </Grid.ColumnDefinitions>
-                                    <ff:CachedImage 
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="90" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="40"/>
+                                        </Grid.ColumnDefinitions>
+                                        <ff:CachedImage 
                                         Grid.Row="0"
                                         Grid.Column="0"
                                         VerticalOptions="Center"
                                         WidthRequest="64"
                                         Source="{Binding pictureFullPath}">
-                                        <ff:CachedImage.Transformations>
-                                            <ffTransformations:CircleTransformation />
-                                        </ff:CachedImage.Transformations>
-                                    </ff:CachedImage>
-                                    <StackLayout Orientation="Vertical"
+                                            <ff:CachedImage.Transformations>
+                                                <ffTransformations:CircleTransformation />
+                                            </ff:CachedImage.Transformations>
+                                        </ff:CachedImage>
+                                        <StackLayout Orientation="Vertical"
                                                  Grid.Row="0"
                                                  Grid.Column="1"
                                                  VerticalOptions="Center"
                                                  HorizontalOptions="FillAndExpand">
-                                        <Label Text ="{Binding FullName}" 
+                                            <Label Text ="{Binding FullName}" 
                                                FontSize="16"
                                                TextColor="{DynamicResource PrimaryTextColor}"/>
-                                        <Label Text ="renseignements complémentaires"></Label>
-                                    </StackLayout>
-                                    <StackLayout Orientation="Horizontal"
+                                            <Label Text ="renseignements complémentaires"></Label>
+                                        </StackLayout>
+                                        <StackLayout Orientation="Horizontal"
                                                  Grid.Row="0"
                                                  Grid.Column="2"
                                                  VerticalOptions="Center"
                                                  HorizontalOptions="FillAndExpand">
-                                        <ImageButton
+                                            <ImageButton
                                         CommandParameter="{Binding .}"
                                         Clicked="OnDelete"
                                         BackgroundColor="Transparent"
                                         >
-                                            <ImageButton.Source>
-                                                <FontImageSource Glyph="&#xe872;"
+                                                <ImageButton.Source>
+                                                    <FontImageSource Glyph="&#xe872;"
                                             FontFamily="{DynamicResource MaterialIconsFont}"
                                             Size="40"
                                             Color="black"/>
-                                            </ImageButton.Source>
-                                        </ImageButton>
-                                    </StackLayout>
-                                </Grid>
+                                                </ImageButton.Source>
+                                            </ImageButton>
+                                        </StackLayout>
+                                    </Grid>
 
-                            </ViewCell>
+                                </ViewCell>
 
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>
-            
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
 
-            <Button 
+
+                <Button 
                 
                 Text="&#xe7fe;"
                     FontFamily="{DynamicResource MaterialIconsFont}"
@@ -92,7 +113,8 @@
                     BackgroundColor="{DynamicResource PrimaryColor}"
                     Clicked="OnAdd"
                     />
-        </AbsoluteLayout>
-
+            </AbsoluteLayout>
+            
+        </Grid>
     </ContentPage.Content>
 </ContentPage>
