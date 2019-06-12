@@ -58,6 +58,7 @@ namespace Gatherman.Views
             {
                 loggedUser.username = userNameEntry.Text;
                 loggedUser.password = passwordEntry.Text;
+                this.IsBusy = true;
                 var authenticatedResult = await loggedUser.isAuthenticated();
                 if (authenticatedResult == 200)
                 {
@@ -76,6 +77,8 @@ namespace Gatherman.Views
                 {
                     await DisplayAlert("Erreur", authenticatedResult.ToString(), "OK");
                 }
+                this.IsBusy = false;
+
             }
         }
     }

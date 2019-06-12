@@ -12,18 +12,7 @@
     
     <ContentPage.Content>
         <AbsoluteLayout HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand">
-            <Button 
-                
-                Text="&#xe7fe;"
-                    FontFamily="{DynamicResource MaterialIconsFont}"
-                    FontSize="Large"
-                    WidthRequest="56" HeightRequest="56" BorderRadius="28"  HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand"
-                    AbsoluteLayout.LayoutBounds="1,1, 100, 100"
-                AbsoluteLayout.LayoutFlags="PositionProportional"
-                    Margin="16"
-                    BackgroundColor="{DynamicResource PrimaryColor}"
-                    Clicked="OnAdd"
-                    />
+            
         <StackLayout>
             <ListView x:Name="lstVMerchant"
                       IsPullToRefreshEnabled="True"
@@ -89,6 +78,20 @@
                 </ListView.ItemTemplate>
             </ListView>
         </StackLayout>
+            
+
+            <Button 
+                
+                Text="&#xe7fe;"
+                    FontFamily="{DynamicResource MaterialIconsFont}"
+                    FontSize="Large"
+                    WidthRequest="56" HeightRequest="56" BorderRadius="28"  HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand"
+                    AbsoluteLayout.LayoutBounds="1,1, 100, 100"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                    Margin="16"
+                    BackgroundColor="{DynamicResource PrimaryColor}"
+                    Clicked="OnAdd"
+                    />
         </AbsoluteLayout>
 
     </ContentPage.Content>

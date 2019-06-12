@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Gatherman.Views.LoginPage"
+             x:Name="loginPage"
              Visual="Material"
              BackgroundColor="{DynamicResource PrimaryColor}"
              Padding="20,0"
@@ -9,6 +10,14 @@
     <ContentPage.Content>
         <StackLayout
             VerticalOptions ="Center">
+            <AbsoluteLayout>
+                <ActivityIndicator x:Name="activity"  
+                       IsRunning="{Binding Source={x:Reference loginPage}, Path=IsBusy}"  
+                       IsVisible="{Binding Source={x:Reference loginPage}, Path=IsBusy}"
+                       AbsoluteLayout.LayoutBounds="0.5,0.5,100,100"
+                       AbsoluteLayout.LayoutFlags="PositionProportional"
+                       />
+            </AbsoluteLayout>
             <Entry Placeholder="login"
                    x:Name="userNameEntry"
                    Keyboard="Plain"
