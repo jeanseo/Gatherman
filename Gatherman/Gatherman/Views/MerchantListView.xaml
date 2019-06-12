@@ -33,74 +33,71 @@
                        />
             </AbsoluteLayout>
             <AbsoluteLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                <StackLayout>
-                    <ListView x:Name="lstVMerchant"
-                              IsPullToRefreshEnabled="True"
-                              IsEnabled="True"
-                              InputTransparent="False"
-                              RowHeight="80"
-                              VerticalOptions="FillAndExpand"
+                <ListView x:Name="lstVMerchant"
+                        IsPullToRefreshEnabled="True"
+                        IsEnabled="True"
+                        InputTransparent="False"
+                        RowHeight="80"
+                        VerticalOptions="FillAndExpand"
+                          Footer="   "
                       >
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="*" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="90" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="40"/>
-                                        </Grid.ColumnDefinitions>
-                                        <ff:CachedImage 
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="90" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="40"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ff:CachedImage 
                                         Grid.Row="0"
                                         Grid.Column="0"
                                         VerticalOptions="Center"
                                         WidthRequest="64"
                                         Source="{Binding pictureFullPath}">
-                                            <ff:CachedImage.Transformations>
-                                                <ffTransformations:CircleTransformation />
-                                            </ff:CachedImage.Transformations>
-                                        </ff:CachedImage>
-                                        <StackLayout Orientation="Vertical"
+                                        <ff:CachedImage.Transformations>
+                                            <ffTransformations:CircleTransformation />
+                                        </ff:CachedImage.Transformations>
+                                    </ff:CachedImage>
+                                    <StackLayout Orientation="Vertical"
                                                  Grid.Row="0"
                                                  Grid.Column="1"
                                                  VerticalOptions="Center"
                                                  HorizontalOptions="FillAndExpand">
-                                            <Label Text ="{Binding FullName}" 
+                                        <Label Text ="{Binding FullName}" 
                                                FontSize="16"
                                                TextColor="{DynamicResource PrimaryTextColor}"/>
-                                            <Label Text ="renseignements complémentaires"></Label>
-                                        </StackLayout>
-                                        <StackLayout Orientation="Horizontal"
+                                        <Label Text ="renseignements complémentaires"></Label>
+                                    </StackLayout>
+                                    <StackLayout Orientation="Horizontal"
                                                  Grid.Row="0"
                                                  Grid.Column="2"
                                                  VerticalOptions="Center"
                                                  HorizontalOptions="FillAndExpand">
-                                            <ImageButton
+                                        <ImageButton
                                         CommandParameter="{Binding .}"
                                         Clicked="OnDelete"
                                         BackgroundColor="Transparent"
                                         >
-                                                <ImageButton.Source>
-                                                    <FontImageSource Glyph="&#xe872;"
+                                            <ImageButton.Source>
+                                                <FontImageSource Glyph="&#xe872;"
                                             FontFamily="{DynamicResource MaterialIconsFont}"
                                             Size="40"
                                             Color="black"/>
-                                                </ImageButton.Source>
-                                            </ImageButton>
-                                        </StackLayout>
-                                    </Grid>
+                                            </ImageButton.Source>
+                                        </ImageButton>
+                                    </StackLayout>
+                                </Grid>
 
-                                </ViewCell>
+                            </ViewCell>
 
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </StackLayout>
-
-
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
                 <Button 
                 
                 Text="&#xe7fe;"

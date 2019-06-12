@@ -65,9 +65,9 @@ namespace Gatherman.DataAccess
             //On charge les données de la base locale
             _connection = DependencyService.Get<ISQLiteDB>().GetConnection();
             var MerchantList = new List<Merchant>();
-            MerchantList.AddRange(await _connection.QueryAsync<Merchant>("SELECT * FROM Merchant WHERE deleted=?", false));
+            MerchantList =await _connection.QueryAsync<Merchant>("SELECT * FROM Merchant WHERE deleted=?", false);
             _Merchants = new ObservableCollection<Merchant>(MerchantList);
-            Debug.Write("----------\n" + JsonConvert.SerializeObject(MerchantList));
+            Debug.Write("----------Liste affichée----\n" + JsonConvert.SerializeObject(MerchantList));
             lstVMerchant.ItemsSource = null;
             lstVMerchant.ItemsSource = _Merchants;
             this.IsBusy = false;
