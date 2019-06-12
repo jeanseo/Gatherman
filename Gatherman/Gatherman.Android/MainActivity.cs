@@ -18,6 +18,7 @@ namespace Gatherman.Droid
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            Window.SetStatusBarColor(Android.Graphics.Color.ParseColor("#BF360C"));
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
