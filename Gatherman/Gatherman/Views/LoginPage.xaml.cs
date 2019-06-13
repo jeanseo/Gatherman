@@ -49,8 +49,6 @@ namespace Gatherman.Views
         }
 
 
-        //Bloque l'appui sur précédent
-        //protected override bool OnBackButtonPressed() => true;
 
         private async void OnLogin(object sender, EventArgs e)
         {

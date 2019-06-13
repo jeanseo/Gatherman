@@ -98,18 +98,20 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <Button 
-                
-                Text="&#xe7fe;"
-                    FontFamily="{DynamicResource MaterialIconsFont}"
-                    FontSize="Large"
-                    WidthRequest="56" HeightRequest="56" BorderRadius="28"  HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand"
+                <Button WidthRequest="56" HeightRequest="56" BorderRadius="28"  HorizontalOptions="EndAndExpand" VerticalOptions="EndAndExpand"
                     AbsoluteLayout.LayoutBounds="1,1, 100, 100"
                 AbsoluteLayout.LayoutFlags="PositionProportional"
                     Margin="16"
                     BackgroundColor="{DynamicResource PrimaryColor}"
-                    Clicked="OnAdd"
-                    />
+                    Clicked="OnAdd">
+                    <Button.ImageSource>
+                        <FontImageSource Glyph="&#xe7fe;"
+                                            FontFamily="{DynamicResource MaterialIconsFont}"
+                                            Size="36"
+                                            Color="#FFFFFF"/>
+                    </Button.ImageSource>
+
+                </Button>
             </AbsoluteLayout>
             
         </Grid>
