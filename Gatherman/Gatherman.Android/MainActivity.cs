@@ -10,10 +10,11 @@ using Vapolia.Droid.Lib.Effects;
 using FFImageLoading.Forms.Platform;
 using Rg.Plugins.Popup.Services;
 using Plugin.Permissions;
+using Android.Support.V7.App;
 
 namespace Gatherman.Droid
 {
-    [Activity(Label = "Gatherman", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Theme = "@style/MainTheme", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -52,4 +53,22 @@ namespace Gatherman.Droid
         }
 
     }
+
+
+
+
+    [Activity(Icon = "@drawable/icon", Theme = "@style/splashscreen", MainLauncher = true, NoHistory = true)]
+    public class SplashActivity : AppCompatActivity
+    {
+        protected override void OnResume()
+        {
+            base.OnResume();
+            StartActivity(typeof(MainActivity));
+            Window.SetStatusBarColor(Android.Graphics.Color.ParseColor("#BF360C"));
+
+        }
+    }
+
+
+
 }
