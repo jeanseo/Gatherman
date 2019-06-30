@@ -62,6 +62,12 @@ namespace Gatherman.DataAccess.Model
         }
         private string _pictureFileName;
 
+        [JsonIgnore]
+        public string MarketName
+        {
+            get { return "Marché"; }
+        }
+
         public string pictureFileName
         {
             get { return _pictureFileName; }

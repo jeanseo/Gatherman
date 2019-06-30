@@ -46,7 +46,7 @@ namespace Gatherman.Data
             HttpResponseMessage response = null;
             using (var client = new HttpClient())
             {
-                response = await client.GetAsync("http://jean-surface:3000/api/Merchants?filter=%7B%22where%22%3A%7B%22deleted%22%3A%22false%22%7D%7D&access_token=" + loggedUser.id);
+                response = await client.GetAsync(Constants.GetMerchantURL + "?filter=%7B%22where%22%3A%7B%22deleted%22%3A%22false%22%7D%7D&access_token=" + loggedUser.id);
                 response.EnsureSuccessStatusCode();
             }
             string responseBody = await response.Content.ReadAsStringAsync();

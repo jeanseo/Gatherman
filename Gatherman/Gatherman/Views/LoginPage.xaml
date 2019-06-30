@@ -18,6 +18,10 @@
                        AbsoluteLayout.LayoutFlags="PositionProportional"
                        />
             </AbsoluteLayout>
+            <Label Text="GatherMan"
+                   TextColor="{DynamicResource SecondaryTextColor}"
+                   FontSize="40"
+                   HorizontalTextAlignment="Center"/>
             <Entry Placeholder="login"
                    x:Name="userNameEntry"
                    Keyboard="Plain"
